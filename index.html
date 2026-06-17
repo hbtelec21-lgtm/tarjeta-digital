@@ -1,0 +1,414 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Tarjeta de Presentación</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .container { background: #ffffff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        button { background: #0070f3; color: white; border: none; font-weight: bold; cursor: pointer; font-size: 16px; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #mensaje { margin-top: 15px; font-weight: bold; font-size: 14px; min-height: 20px; }
+        .preview { margin-top: 10px; max-width: 100%; border-radius: 8px; display: none; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-contenido {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        .modal-cerrar {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        .btn-auth {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-login { background: #0070f3; color: white; }
+        .btn-registro { background: #6b7280; color: white; }
+        .toggle-auth { text-align: center; margin-top: 15px; color: #0070f3; cursor: pointer; font-size: 14px; }
+        .mensaje-auth { margin-top: 15px; font-size: 14px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="background: #f0fdf4; padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <span id="userStatusDisplay">👤 No ha iniciado sesión</span>
+        <button id="abrirModalBtn" style="background: #0070f3; color: white; padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer;">🔐 Iniciar Sesión</button>
+        <button id="cerrarSesionBtn" style="background: #ef4444; color: white; padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; display: none;">🚪 Cerrar Sesión</button>
+    </div>
+
+    <h2>Crear Tarjeta de Presentación</h2>
+    <form id="form-tarjeta">
+        <input type="text" id="titulo" placeholder="Nombre completo" required>
+        <input type="text" id="subtitulo" placeholder="Profesión / Eslogan" required>
+        <input type="tel" id="telefono" placeholder="Teléfono / WhatsApp" required>
+        <input type="email" id="email_tarjeta" placeholder="Correo Electrónico" required>
+        <input type="text" id="url_amigable" placeholder="Dirección web única (ej: juan-perez-electricista)" required>
+        <small style="display: block; margin-top: -8px; margin-bottom: 10px; color: #666;">Su tarjeta estará en: sudominio.com/ver-tarjeta.html?url=</small>
+        <input type="file" id="imagen" accept="image/*" required>
+        <img id="preview" class="preview" alt="Vista previa">
+        <button type="submit">💾 Guardar Tarjeta en la Nube</button>
+    </form>
+    <p id="mensaje"></p>
+</div>
+
+<div id="modalAuth" class="modal">
+    <div class="modal-contenido">
+        <span id="cerrarModal" class="modal-cerrar">&times;</span>
+        <h3 id="modalTitulo" style="text-align: center;">Iniciar Sesión</h3>
+        <input type="email" id="modalEmail" placeholder="Correo electrónico" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc;">
+        <input type="password" id="modalPassword" placeholder="Contraseña" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc;">
+        
+        <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+            <input type="checkbox" id="consentimiento" style="width: 20px; margin: 0;">
+            <label for="consentimiento" style="font-size: 12px; text-align: left; margin: 0;">
+                He leído y acepto los <a href="terminos.html" target="_blank">Términos y Condiciones</a> y la 
+                <a href="privacidad.html" target="_blank">Política de Privacidad</a>.
+            </label>
+        </div>
+        
+        <button id="modalAccionBtn" class="btn-auth btn-login">Iniciar Sesión</button>
+        <div id="modalMensaje" class="mensaje-auth"></div>
+        <div id="toggleAuthLink" class="toggle-auth">¿No tiene cuenta? Regístrese</div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://tabfvwqhvvqtjjsplehx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_zFqNv-oumnQ7GpHgLKfcYg_SdDlXE3p';
+
+const form = document.getElementById('form-tarjeta');
+const messageText = document.getElementById('mensaje');
+const inputImagen = document.getElementById('imagen');
+const preview = document.getElementById('preview');
+
+inputImagen.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    }
+});
+
+form.onsubmit = async function(e) {
+    e.preventDefault();
+    const boton = form.querySelector('button');
+    boton.disabled = true;
+    messageText.style.color = "orange";
+    messageText.innerText = "⌛ Guardando tarjeta...";
+
+    try {
+        const archivo = inputImagen.files[0];
+        if (!archivo) throw new Error("Selecciona una imagen");
+        
+        const nombreArchivo = `${Date.now()}_${archivo.name}`;
+        
+        const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/tarjetas/${nombreArchivo}`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            },
+            body: archivo
+        });
+        
+        if (!uploadRes.ok) {
+            const error = await uploadRes.text();
+            throw new Error(`Error subiendo imagen: ${error}`);
+        }
+        
+        const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/tarjetas/${nombreArchivo}`;
+        
+        const datos = {
+            titulo: document.getElementById('titulo').value,
+            subtitulo: document.getElementById('subtitulo').value,
+            telefono: document.getElementById('telefono').value,
+            email: document.getElementById('email_tarjeta').value,
+            image_url: imageUrl,
+            url_unique: document.getElementById('url_amigable').value,
+            usos: 0,
+            bloqueada: false
+        };
+        
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/perfiles`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        });
+        
+        if (response.ok) {
+            messageText.style.color = "green";
+            messageText.innerText = "🎉 ¡Tarjeta guardada con éxito!";
+            const enlaceCompleto = window.location.origin + window.location.pathname.replace('index.html', '') + `ver-tarjeta.html?url=${document.getElementById('url_amigable').value}`;
+            messageText.innerText += `\n🔗 Enlace público: ${enlaceCompleto}`;
+            
+            const qrContainer = document.createElement('div');
+            qrContainer.style.marginTop = '20px';
+            qrContainer.style.padding = '15px';
+            qrContainer.style.background = '#f9fafb';
+            qrContainer.style.borderRadius = '12px';
+            qrContainer.style.textAlign = 'center';
+            qrContainer.innerHTML = '<strong>📱 Código QR para compartir:</strong><br>';
+            
+            const qrCodeDiv = document.createElement('div');
+            qrCodeDiv.style.display = 'inline-block';
+            qrCodeDiv.style.margin = '10px auto';
+            new QRCode(qrCodeDiv, {
+                text: enlaceCompleto,
+                width: 150,
+                height: 150
+            });
+            qrContainer.appendChild(qrCodeDiv);
+            
+            const btnDescargar = document.createElement('button');
+            btnDescargar.innerText = '📥 Descargar QR';
+            btnDescargar.style.background = '#6b7280';
+            btnDescargar.style.color = 'white';
+            btnDescargar.style.border = 'none';
+            btnDescargar.style.padding = '8px 16px';
+            btnDescargar.style.borderRadius = '8px';
+            btnDescargar.style.cursor = 'pointer';
+            btnDescargar.style.marginTop = '10px';
+            btnDescargar.onclick = function() {
+                const canvas = qrCodeDiv.querySelector('canvas');
+                if (canvas) {
+                    const link = document.createElement('a');
+                    link.download = `qr-${document.getElementById('url_amigable').value}.png`;
+                    link.href = canvas.toDataURL();
+                    link.click();
+                } else {
+                    alert('Error: No se pudo generar la imagen QR');
+                }
+            };
+            qrContainer.appendChild(btnDescargar);
+            
+            messageText.parentNode.appendChild(qrContainer);
+            form.reset();
+            preview.style.display = 'none';
+        } else {
+            const error = await response.json();
+            throw new Error(error.message || "Error al guardar");
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        messageText.style.color = "red";
+        messageText.innerText = `❌ ${error.message}`;
+    } finally {
+        boton.disabled = false;
+    }
+};
+
+const modal = document.getElementById('modalAuth');
+const abrirModal = document.getElementById('abrirModalBtn');
+const cerrarModal = document.getElementById('cerrarModal');
+const modalTitulo = document.getElementById('modalTitulo');
+const modalAccionBtn = document.getElementById('modalAccionBtn');
+const modalEmail = document.getElementById('modalEmail');
+const modalPassword = document.getElementById('modalPassword');
+const modalMensaje = document.getElementById('modalMensaje');
+const toggleAuthLink = document.getElementById('toggleAuthLink');
+
+let esModoLogin = true;
+
+abrirModal.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    modalEmail.value = '';
+    modalPassword.value = '';
+    modalMensaje.innerHTML = '';
+    esModoLogin = true;
+    actualizarModalUI();
+});
+
+cerrarModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+toggleAuthLink.addEventListener('click', () => {
+    esModoLogin = !esModoLogin;
+    actualizarModalUI();
+    modalMensaje.innerHTML = '';
+    modalPassword.value = '';
+});
+
+function actualizarModalUI() {
+    if (esModoLogin) {
+        modalTitulo.innerText = 'Iniciar Sesión';
+        modalAccionBtn.innerText = 'Iniciar Sesión';
+        toggleAuthLink.innerText = '¿No tiene cuenta? Regístrese';
+        modalAccionBtn.className = 'btn-auth btn-login';
+    } else {
+        modalTitulo.innerText = 'Crear Cuenta';
+        modalAccionBtn.innerText = 'Registrarse';
+        toggleAuthLink.innerText = '¿Ya tiene cuenta? Inicie Sesión';
+        modalAccionBtn.className = 'btn-auth btn-registro';
+    }
+}
+
+function mostrarMensajeModal(texto, esError = true) {
+    modalMensaje.innerHTML = texto;
+    modalMensaje.style.color = esError ? '#ef4444' : '#10b981';
+    setTimeout(() => {
+        if (modalMensaje.innerHTML === texto) {
+            modalMensaje.innerHTML = '';
+        }
+    }, 3000);
+}
+
+async function registrarUsuario(email, password) {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+    return response.json();
+}
+
+async function iniciarSesion(email, password) {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+    return response.json();
+}
+
+function guardarSesion(session) {
+    localStorage.setItem('mi_sesion', JSON.stringify(session));
+}
+
+function obtenerSesion() {
+    const guardada = localStorage.getItem('mi_sesion');
+    return guardada ? JSON.parse(guardada) : null;
+}
+
+function eliminarSesion() {
+    localStorage.removeItem('mi_sesion');
+}
+
+function actualizarBarraUsuario() {
+    const sesion = obtenerSesion();
+    const userSpan = document.getElementById('userStatusDisplay');
+    const abrirBtn = document.getElementById('abrirModalBtn');
+    const cerrarBtn = document.getElementById('cerrarSesionBtn');
+    
+    if (sesion && sesion.user) {
+        userSpan.innerHTML = `✅ Conectado como: ${sesion.user.email}`;
+        abrirBtn.style.display = 'none';
+        cerrarBtn.style.display = 'inline-block';
+    } else {
+        userSpan.innerHTML = '👤 No ha iniciado sesión';
+        abrirBtn.style.display = 'inline-block';
+        cerrarBtn.style.display = 'none';
+    }
+}
+
+modalAccionBtn.addEventListener('click', async () => {
+    const email = modalEmail.value.trim();
+    const password = modalPassword.value;
+    
+    if (!email || !password) {
+        mostrarMensajeModal('Complete correo y contraseña');
+        return;
+    }
+    
+    if (!esModoLogin && password.length < 6) {
+        mostrarMensajeModal('La contraseña debe tener al menos 6 caracteres');
+        return;
+    }
+    
+    if (!esModoLogin) {
+        const consentimiento = document.getElementById('consentimiento');
+        if (!consentimiento || !consentimiento.checked) {
+            mostrarMensajeModal('Debes aceptar los Términos y Condiciones para registrarte');
+            modalAccionBtn.disabled = false;
+            modalAccionBtn.innerText = 'Registrarse';
+            return;
+        }
+    }
+    
+    modalAccionBtn.disabled = true;
+    modalAccionBtn.innerText = esModoLogin ? 'Ingresando...' : 'Registrando...';
+    
+    try {
+        let resultado;
+        if (esModoLogin) {
+            resultado = await iniciarSesion(email, password);
+        } else {
+            resultado = await registrarUsuario(email, password);
+        }
+        
+        if (resultado.access_token) {
+            guardarSesion(resultado);
+            actualizarBarraUsuario();
+            modal.style.display = 'none';
+            mostrarMensajeModal('✅ Sesión iniciada correctamente', false);
+            setTimeout(() => location.reload(), 1000);
+        } else if (resultado.user && !resultado.access_token) {
+            mostrarMensajeModal('✅ Cuenta creada. Revise su correo para confirmar.', false);
+            setTimeout(() => { modal.style.display = 'none'; }, 2000);
+        } else {
+            const mensajeError = resultado.error_description || resultado.msg || 'Error desconocido';
+            mostrarMensajeModal(`❌ ${mensajeError}`);
+        }
+    } catch (error) {
+        mostrarMensajeModal(`❌ Error de conexión: ${error.message}`);
+    } finally {
+        modalAccionBtn.disabled = false;
+        modalAccionBtn.innerText = esModoLogin ? 'Iniciar Sesión' : 'Registrarse';
+    }
+});
+
+document.getElementById('cerrarSesionBtn').addEventListener('click', () => {
+    eliminarSesion();
+    actualizarBarraUsuario();
+    location.reload();
+});
+
+actualizarBarraUsuario();
+</script>
+</body>
+</html>
