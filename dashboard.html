@@ -6,7 +6,7 @@
     <title>Dashboard - Mi Tarjeta Digital</title>
 
     <!-- ==========================================
-    SUPABASE JS (NECESARIO PARA CONECTAR)
+    SUPABASE JS
     ========================================== -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -14,7 +14,7 @@
     ESTILOS DEL SISTEMA DE AYUDA
     ========================================== -->
     <style>
-        /* Botón flotante de ayuda */
+        /* ===== BOTÓN FLOTANTE ===== */
         .ayuda-tooltip {
             position: fixed;
             bottom: 30px;
@@ -43,8 +43,23 @@
             100% { transform: scale(1); }
         }
         .ayuda-tooltip .icono { font-size: 24px; }
+        .badge-ayuda {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
 
-        /* Modal de ayuda */
+        /* ===== MODAL DE AYUDA ===== */
         .modal-ayuda {
             display: none;
             position: fixed;
@@ -57,7 +72,9 @@
             justify-content: center;
             align-items: center;
         }
-        .modal-ayuda.active { display: flex; }
+        .modal-ayuda.active {
+            display: flex;
+        }
         .modal-ayuda-contenido {
             background: white;
             border-radius: 20px;
@@ -81,7 +98,10 @@
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 15px;
         }
-        .modal-ayuda-header h2 { margin: 0; color: #333; }
+        .modal-ayuda-header h2 {
+            margin: 0;
+            color: #333;
+        }
         .btn-cerrar-ayuda {
             background: none;
             border: none;
@@ -90,13 +110,18 @@
             color: #999;
             transition: color 0.3s;
         }
-        .btn-cerrar-ayuda:hover { color: #333; }
+        .btn-cerrar-ayuda:hover {
+            color: #333;
+        }
 
+        /* ===== PASOS ===== */
         .paso-ayuda {
             display: none;
             padding: 10px 0;
         }
-        .paso-ayuda.active { display: block; }
+        .paso-ayuda.active {
+            display: block;
+        }
         .paso-ayuda .numero-paso {
             display: inline-block;
             background: #667eea;
@@ -121,6 +146,7 @@
             margin: 10px 0;
         }
 
+        /* ===== NAVEGACIÓN ===== */
         .navegacion-pasos {
             display: flex;
             justify-content: space-between;
@@ -141,18 +167,25 @@
             background: #f0f0f0;
             color: #333;
         }
-        .btn-paso-anterior:hover { background: #e0e0e0; }
+        .btn-paso-anterior:hover {
+            background: #e0e0e0;
+        }
         .btn-paso-siguiente {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        .btn-paso-siguiente:hover { transform: scale(1.02); }
+        .btn-paso-siguiente:hover {
+            transform: scale(1.02);
+        }
         .btn-paso-final {
             background: #28a745;
             color: white;
         }
-        .btn-paso-final:hover { background: #218838; }
+        .btn-paso-final:hover {
+            background: #218838;
+        }
 
+        /* ===== INDICADORES ===== */
         .indicadores-pasos {
             display: flex;
             gap: 8px;
@@ -172,6 +205,7 @@
             transform: scale(1.2);
         }
 
+        /* ===== POPUP DE BIENVENIDA ===== */
         .popup-bienvenida {
             position: fixed;
             top: 20px;
@@ -205,25 +239,8 @@
             cursor: pointer;
             color: #999;
         }
-        .badge-ayuda {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff6b6b;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
 
-        /* ============================
-           ESTILOS BÁSICOS DEL DASHBOARD
-           ============================ */
+        /* ===== ESTILOS BÁSICOS ===== */
         body {
             font-family: Arial, sans-serif;
             max-width: 600px;
@@ -277,14 +294,6 @@
             border: 2px dashed #ddd;
             padding: 5px;
         }
-        .mensaje-error {
-            background: #fee;
-            border: 2px solid #dc3545;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            color: #721c24;
-        }
     </style>
 </head>
 <body>
@@ -294,7 +303,6 @@
         <p style="text-align:center; color:#666;">Completa el formulario para crear tu tarjeta digital</p>
 
         <form id="formularioTarjeta">
-
             <label>📌 Nombre completo</label>
             <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
 
@@ -319,22 +327,20 @@
 
             <button type="button" id="btnGuardar" onclick="guardarTarjeta()">🚀 Crear tarjeta</button>
         </form>
-
-        <div id="mensajePago" style="display:none;"></div>
     </div>
 
     <!-- ============================================
-    SISTEMA DE AYUDA - HTML
+    SISTEMA DE AYUDA
     ============================================ -->
 
-    <!-- Botón flotante -->
+    <!-- BOTÓN FLOTANTE -->
     <div class="ayuda-tooltip" id="btnAyuda" onclick="abrirAyuda()">
         <span class="icono">💡</span>
         <span>¿Cómo funciona?</span>
         <span class="badge-ayuda">1</span>
     </div>
 
-    <!-- Popup de bienvenida -->
+    <!-- POPUP DE BIENVENIDA -->
     <div class="popup-bienvenida" id="popupBienvenida">
         <button class="cerrar-popup" onclick="cerrarPopupBienvenida()">✕</button>
         <h3 style="margin:0 0 10px 0;">👋 ¡Bienvenido!</h3>
@@ -343,7 +349,7 @@
         </p>
     </div>
 
-    <!-- Modal de ayuda -->
+    <!-- MODAL DE AYUDA -->
     <div class="modal-ayuda" id="modalAyuda">
         <div class="modal-ayuda-contenido">
             <div class="modal-ayuda-header">
@@ -687,69 +693,14 @@
                     return;
                 }
 
-                // Mostrar mensaje de pago pendiente
-                const formulario = document.getElementById('formularioTarjeta');
-                formulario.innerHTML = `
-                    <div style="background:#fff3cd; border:2px solid #ffc107; border-radius:10px; padding:20px; text-align:center;">
-                        <h2 style="color:#856404;">⏳ ¡Tarjeta Creada! Esperando Pago</h2>
-                        <p>Tu tarjeta ha sido creada exitosamente.</p>
-                        <p><strong>📌 URL:</strong> ${window.location.origin}/ver-tarjeta.html?url=${urlUnique}</p>
-                        <div style="background:white; border-radius:8px; padding:15px; margin:15px 0; text-align:left;">
-                            <p><strong>💵 Monto:</strong> $40,000 COP</p>
-                            <p><strong>📱 Nequi:</strong> 3001234567</p>
-                            <p><strong>📌 Referencia:</strong> ${urlUnique}</p>
-                            <p>Envía el comprobante a <strong>soporte@tuapp.com</strong></p>
-                        </div>
-                        <button onclick="window.location.href='dashboard.html'" style="background:#007bff; color:white; border:none; padding:10px 30px; border-radius:5px; cursor:pointer;">
-                            📋 Volver al Dashboard
-                        </button>
-                    </div>
-                `;
-
-                // Enviar email de tarjeta creada
-                await enviarEmailTarjetaCreada(tarjetaData[0], { email, nombre });
+                alert('✅ Tarjeta creada exitosamente. Esperando aprobación de pago.');
+                window.location.href = 'dashboard.html';
 
             } catch (error) {
                 console.error('Error:', error);
                 alert('Ocurrió un error inesperado. Por favor intenta de nuevo.');
             }
         }
-
-        // ============================================
-        // FUNCIONES DE EMAIL (con Supabase Edge Function)
-        // ============================================
-        async function enviarEmail(to, subject, html) {
-            try {
-                const response = await fetch(
-                    'https://tabfvwqhvvqtjjsplehx.supabase.co/functions/v1/send-email',
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                        },
-                        body: JSON.stringify({ to, subject, html })
-                    }
-                );
-                return await response.json();
-            } catch (error) {
-                console.error('Error enviando email:', error);
-                return { success: false };
-            }
-        }
-
-        async function enviarEmailTarjetaCreada(tarjeta, usuario) {
-            const html = `
-                <h2>Hola ${usuario.nombre},</h2>
-                <p>Tu tarjeta ha sido creada. Realiza el pago para activarla:</p>
-                <p><strong>💵 Monto:</strong> $40,000 COP</p>
-                <p><strong>📱 Nequi:</strong> 3001234567</p>
-                <p><strong>📌 Referencia:</strong> ${tarjeta.url_unique}</p>
-                <a href="${window.location.origin}/ver-tarjeta.html?url=${tarjeta.url_unique}">Ver tarjeta</a>
-            `;
-            return await enviarEmail(usuario.email, '⏳ Tu tarjeta ha sido creada', html);
-        }
     </script>
-
 </body>
 </html>
