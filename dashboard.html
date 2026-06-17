@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard - Mi Tarjeta Digital</title>
+
+    <!-- ==========================================
+    SUPABASE JS (NECESARIO PARA CONECTAR)
+    ========================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- ==========================================
+    ESTILOS DEL SISTEMA DE AYUDA
+    ========================================== -->
+    <style>
+        /* Botón flotante de ayuda */
+        .ayuda-tooltip {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        .ayuda-tooltip:hover {
+            transform: scale(1.05);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .ayuda-tooltip .icono { font-size: 24px; }
+
+        /* Modal de ayuda */
+        .modal-ayuda {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-ayuda.active { display: flex; }
+        .modal-ayuda-contenido {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-ayuda-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+        .modal-ayuda-header h2 { margin: 0; color: #333; }
+        .btn-cerrar-ayuda {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+        .btn-cerrar-ayuda:hover { color: #333; }
+
+        .paso-ayuda {
+            display: none;
+            padding: 10px 0;
+        }
+        .paso-ayuda.active { display: block; }
+        .paso-ayuda .numero-paso {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .paso-ayuda .titulo-paso {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+        .paso-ayuda .descripcion-paso {
+            color: #666;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .navegacion-pasos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        .btn-paso {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-paso-anterior {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-paso-anterior:hover { background: #e0e0e0; }
+        .btn-paso-siguiente {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-paso-siguiente:hover { transform: scale(1.02); }
+        .btn-paso-final {
+            background: #28a745;
+            color: white;
+        }
+        .btn-paso-final:hover { background: #218838; }
+
+        .indicadores-pasos {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .indicador-paso {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .indicador-paso.active {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+
+        .popup-bienvenida {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 9998;
+            display: none;
+            max-width: 90%;
+            text-align: center;
+            border-left: 5px solid #667eea;
+        }
+        .popup-bienvenida.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+        @keyframes slideDown {
+            from { transform: translate(-50%, -100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .popup-bienvenida .cerrar-popup {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+        }
+        .badge-ayuda {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* ============================
+           ESTILOS BÁSICOS DEL DASHBOARD
+           ============================ */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f4f7fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; text-align: center; }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        button:hover { background: #5a67d8; }
+        .vista-previa {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .vista-previa img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            border: 2px dashed #ddd;
+            padding: 5px;
+        }
+        .mensaje-error {
+            background: #fee;
+            border: 2px solid #dc3545;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>📇 Crear tu tarjeta</h1>
+        <p style="text-align:center; color:#666;">Completa el formulario para crear tu tarjeta digital</p>
+
+        <form id="formularioTarjeta">
+
+            <label>📌 Nombre completo</label>
+            <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
+
+            <label>💼 Cargo</label>
+            <input type="text" id="cargo" placeholder="Ej: CEO">
+
+            <label>🏢 Empresa</label>
+            <input type="text" id="empresa" placeholder="Ej: Mi Empresa S.A.S">
+
+            <label>📞 Teléfono</label>
+            <input type="text" id="telefono" placeholder="Ej: 3001234567">
+
+            <label>✉️ Email</label>
+            <input type="email" id="email" placeholder="Ej: juan@empresa.com" required>
+
+            <label>🖼️ Foto de perfil</label>
+            <input type="file" id="imagenInput" accept="image/*">
+
+            <div class="vista-previa" id="vistaPreviaImagen">
+                <p style="color:#999;">Selecciona una imagen profesional</p>
+            </div>
+
+            <button type="button" id="btnGuardar" onclick="guardarTarjeta()">🚀 Crear tarjeta</button>
+        </form>
+
+        <div id="mensajePago" style="display:none;"></div>
+    </div>
+
+    <!-- ============================================
+    SISTEMA DE AYUDA - HTML
+    ============================================ -->
+
+    <!-- Botón flotante -->
+    <div class="ayuda-tooltip" id="btnAyuda" onclick="abrirAyuda()">
+        <span class="icono">💡</span>
+        <span>¿Cómo funciona?</span>
+        <span class="badge-ayuda">1</span>
+    </div>
+
+    <!-- Popup de bienvenida -->
+    <div class="popup-bienvenida" id="popupBienvenida">
+        <button class="cerrar-popup" onclick="cerrarPopupBienvenida()">✕</button>
+        <h3 style="margin:0 0 10px 0;">👋 ¡Bienvenido!</h3>
+        <p style="margin:0; color:#666;">
+            ¿Necesitas ayuda? Haz clic en el botón 💡 para ver una guía paso a paso.
+        </p>
+    </div>
+
+    <!-- Modal de ayuda -->
+    <div class="modal-ayuda" id="modalAyuda">
+        <div class="modal-ayuda-contenido">
+            <div class="modal-ayuda-header">
+                <h2>📚 Guía de Uso</h2>
+                <button class="btn-cerrar-ayuda" onclick="cerrarAyuda()">✕</button>
+            </div>
+
+            <div id="contenedorPasos">
+                <div class="paso-ayuda active" data-paso="0">
+                    <span class="numero-paso">1</span>
+                    <span class="titulo-paso">📝 Crear tu cuenta</span>
+                    <div class="descripcion-paso">
+                        <p>Regístrate con tu email y contraseña para comenzar.</p>
+                        <ul style="text-align:left; color:#666;">
+                            <li>✅ Usa un email válido</li>
+                            <li>✅ Contraseña de al menos 6 caracteres</li>
+                            <li>✅ Acepta los términos y condiciones</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="paso-ayuda" data-paso="1">
+                    <span class="numero-paso">2</span>
+                    <span class="titulo-paso">🪪 Crear tu tarjeta</span>
+                    <div class="descripcion-paso">
+                        <p>Completa el formulario con tus datos profesionales.</p>
+                        <ul style="text-align:left; color:#666;">
+                            <li>📌 Nombre completo</li>
+                            <li>💼 Cargo y empresa</li>
+                            <li>📞 Teléfono de contacto</li>
+                            <li>✉️ Email profesional</li>
+                            <li>🖼️ Foto de perfil</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="paso-ayuda" data-paso="2">
+                    <span class="numero-paso">3</span>
+                    <span class="titulo-paso">💰 Activación con Nequi</span>
+                    <div class="descripcion-paso">
+                        <p>Para activar tu tarjeta, realiza el pago:</p>
+                        <div style="background:#f8f9fa; border-radius:10px; padding:15px; margin:10px 0;">
+                            <p><strong>💵 Monto:</strong> $40,000 COP</p>
+                            <p><strong>📱 Nequi:</strong> 3001234567</p>
+                            <p><strong>📌 Referencia:</strong> El código único de tu tarjeta</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="paso-ayuda" data-paso="3">
+                    <span class="numero-paso">4</span>
+                    <span class="titulo-paso">📤 Compartir tu tarjeta</span>
+                    <div class="descripcion-paso">
+                        <p>Una vez activa, comparte tu tarjeta:</p>
+                        <ul style="text-align:left; color:#666;">
+                            <li>📱 WhatsApp</li>
+                            <li>📷 Código QR</li>
+                            <li>🌐 Redes sociales</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="paso-ayuda" data-paso="4">
+                    <span class="numero-paso">5</span>
+                    <span class="titulo-paso">📷 Código QR</span>
+                    <div class="descripcion-paso">
+                        <p>Usa el código QR en tu firma de email o imprímelo.</p>
+                        <div style="background:#e8f5e9; padding:10px; border-radius:8px;">
+                            <p>💡 Escanea con la cámara de cualquier celular.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="paso-ayuda" data-paso="5">
+                    <span class="numero-paso">6</span>
+                    <span class="titulo-paso">🔄 Usos Gratis</span>
+                    <div class="descripcion-paso">
+                        <p>Cada tarjeta tiene <strong>20 usos gratis</strong>.</p>
+                        <div style="background:#fff3cd; border-radius:10px; padding:15px; margin:10px 0;">
+                            <p>Al llegar a 20, se bloquea automáticamente.</p>
+                            <p>Actívala con $40,000 COP por 1 año.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navegacion-pasos">
+                <button class="btn-paso btn-paso-anterior" onclick="pasoAnterior()">◀ Anterior</button>
+                <span id="indicadorPaso" style="color:#999; font-size:14px;">1 / 6</span>
+                <button class="btn-paso btn-paso-siguiente" onclick="pasoSiguiente()" id="btnSiguiente">Siguiente ▶</button>
+            </div>
+
+            <div class="indicadores-pasos" id="indicadoresPasos">
+                <span class="indicador-paso active" onclick="irPaso(0)"></span>
+                <span class="indicador-paso" onclick="irPaso(1)"></span>
+                <span class="indicador-paso" onclick="irPaso(2)"></span>
+                <span class="indicador-paso" onclick="irPaso(3)"></span>
+                <span class="indicador-paso" onclick="irPaso(4)"></span>
+                <span class="indicador-paso" onclick="irPaso(5)"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+    JAVASCRIPT
+    ============================================ -->
+    <script>
+        // ============================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================
+        const SUPABASE_URL = 'https://tabfvwqhvvqtjjsplehx.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_zFqNv-oumnQ7GpHgLKfcYg_SdDlXE3p';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // SISTEMA DE AYUDA
+        // ============================================
+        let pasoActual = 0;
+        const totalPasos = 6;
+
+        function abrirAyuda() {
+            const modal = document.getElementById('modalAyuda');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            pasoActual = 0;
+            actualizarPaso();
+            const badge = document.querySelector('.badge-ayuda');
+            if (badge) badge.style.display = 'none';
+            cerrarPopupBienvenida();
+        }
+
+        function cerrarAyuda() {
+            const modal = document.getElementById('modalAyuda');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function pasoSiguiente() {
+            if (pasoActual < totalPasos - 1) {
+                pasoActual++;
+                actualizarPaso();
+            } else {
+                cerrarAyuda();
+            }
+        }
+
+        function pasoAnterior() {
+            if (pasoActual > 0) {
+                pasoActual--;
+                actualizarPaso();
+            }
+        }
+
+        function irPaso(index) {
+            pasoActual = index;
+            actualizarPaso();
+        }
+
+        function actualizarPaso() {
+            document.querySelectorAll('.paso-ayuda').forEach(el => el.classList.remove('active'));
+            const pasoActualEl = document.querySelector(`.paso-ayuda[data-paso="${pasoActual}"]`);
+            if (pasoActualEl) pasoActualEl.classList.add('active');
+            document.getElementById('indicadorPaso').textContent = `${pasoActual + 1} / ${totalPasos}`;
+            document.querySelectorAll('.indicador-paso').forEach((el, index) => {
+                el.classList.toggle('active', index === pasoActual);
+            });
+            const btnSiguiente = document.getElementById('btnSiguiente');
+            if (pasoActual === totalPasos - 1) {
+                btnSiguiente.textContent = '✅ ¡Entendido!';
+                btnSiguiente.className = 'btn-paso btn-paso-final';
+            } else {
+                btnSiguiente.textContent = 'Siguiente ▶';
+                btnSiguiente.className = 'btn-paso btn-paso-siguiente';
+            }
+        }
+
+        function mostrarPopupBienvenida() {
+            if (!localStorage.getItem('ayuda_vista')) {
+                const popup = document.getElementById('popupBienvenida');
+                popup.classList.add('show');
+                localStorage.setItem('ayuda_vista', 'true');
+                setTimeout(cerrarPopupBienvenida, 8000);
+            }
+        }
+
+        function cerrarPopupBienvenida() {
+            const popup = document.getElementById('popupBienvenida');
+            popup.classList.remove('show');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(mostrarPopupBienvenida, 2000);
+        });
+
+        // ============================================
+        // FUNCIONES DE VALIDACIÓN Y GUARDADO
+        // ============================================
+        function mostrarLoading(mensaje) {
+            const loading = document.createElement('div');
+            loading.id = 'loadingOverlay';
+            loading.style.cssText = `
+                position: fixed; top:0; left:0; width:100%; height:100%;
+                background: rgba(0,0,0,0.7); display:flex; justify-content:center;
+                align-items:center; z-index:9999; color:white; font-size:18px;
+            `;
+            loading.innerHTML = `
+                <div style="text-align:center;">
+                    <div style="border:4px solid #f3f3f3; border-top:4px solid #3498db;
+                        border-radius:50%; width:50px; height:50px;
+                        animation: spin 1s linear infinite; margin:0 auto 20px;">
+                    </div>
+                    ${mensaje || 'Procesando...'}
+                </div>
+            `;
+            if (!document.getElementById('spinKeyframes')) {
+                const style = document.createElement('style');
+                style.id = 'spinKeyframes';
+                style.textContent = '@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
+                document.head.appendChild(style);
+            }
+            document.body.appendChild(loading);
+        }
+
+        function ocultarLoading() {
+            const loading = document.getElementById('loadingOverlay');
+            if (loading) loading.remove();
+        }
+
+        function validarFormatoImagen(file) {
+            const tipos = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!tipos.includes(file.type)) {
+                alert('❌ Solo se permiten imágenes en formato JPG, JPEG o PNG');
+                return false;
+            }
+            return true;
+        }
+
+        function validarPesoImagen(file) {
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ La imagen no puede superar los 5 MB');
+                return false;
+            }
+            return true;
+        }
+
+        function generarUrlUnica() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        async function subirImagenASupabase(file) {
+            try {
+                const fileName = `${Date.now()}_${file.name}`;
+                const filePath = `tarjetas/${fileName}`;
+                const { data, error } = await supabase.storage.from('tarjetas').upload(filePath, file);
+                if (error) return { error: error.message };
+                const { data: urlData } = supabase.storage.from('tarjetas').getPublicUrl(filePath);
+                return { publicUrl: urlData.publicUrl };
+            } catch (error) {
+                return { error: error.message };
+            }
+        }
+
+        async function validarImagenConVision(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        const base64 = e.target.result.split(',')[1];
+                        mostrarLoading('🔍 Analizando imagen con IA...');
+                        const response = await fetch(
+                            'https://tabfvwqhvvqtjjsplehx.supabase.co/functions/v1/vision-validate',
+                            {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                                },
+                                body: JSON.stringify({ imageBase64: base64 })
+                            }
+                        );
+                        const result = await response.json();
+                        ocultarLoading();
+                        if (result.esSeguro === false) {
+                            alert('❌ Imagen rechazada: ' + result.motivos.join(', '));
+                            resolve({ aprobado: false });
+                        } else {
+                            resolve({ aprobado: true });
+                        }
+                    } catch (error) {
+                        ocultarLoading();
+                        resolve({ aprobado: true, warning: 'Error de validación' });
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function guardarTarjeta() {
+            try {
+                const nombre = document.getElementById('nombre').value;
+                const email = document.getElementById('email').value;
+                if (!nombre || !email) {
+                    alert('Por favor completa todos los campos obligatorios');
+                    return;
+                }
+                const fileInput = document.getElementById('imagenInput');
+                const file = fileInput?.files[0];
+                if (!file) {
+                    alert('Por favor selecciona una imagen');
+                    return;
+                }
+                if (!validarFormatoImagen(file)) return;
+                if (!validarPesoImagen(file)) return;
+
+                const validation = await validarImagenConVision(file);
+                if (!validation.aprobado) return;
+
+                const resultado = await subirImagenASupabase(file);
+                if (resultado.error) {
+                    alert('Error al subir la imagen: ' + resultado.error);
+                    return;
+                }
+
+                const urlUnique = generarUrlUnica();
+                const tarjetaData = {
+                    nombre,
+                    cargo: document.getElementById('cargo').value || '',
+                    empresa: document.getElementById('empresa').value || '',
+                    telefono: document.getElementById('telefono').value || '',
+                    email,
+                    url_unique: urlUnique,
+                    imagen_url: resultado.publicUrl,
+                    estado_aprobacion: 'pendiente_pago',
+                    usos: 0,
+                    created_at: new Date().toISOString()
+                };
+
+                const { data, error } = await supabase.from('perfiles').insert([tarjetaData]).select();
+                if (error) {
+                    alert('Error al guardar: ' + error.message);
+                    return;
+                }
+
+                // Mostrar mensaje de pago pendiente
+                const formulario = document.getElementById('formularioTarjeta');
+                formulario.innerHTML = `
+                    <div style="background:#fff3cd; border:2px solid #ffc107; border-radius:10px; padding:20px; text-align:center;">
+                        <h2 style="color:#856404;">⏳ ¡Tarjeta Creada! Esperando Pago</h2>
+                        <p>Tu tarjeta ha sido creada exitosamente.</p>
+                        <p><strong>📌 URL:</strong> ${window.location.origin}/ver-tarjeta.html?url=${urlUnique}</p>
+                        <div style="background:white; border-radius:8px; padding:15px; margin:15px 0; text-align:left;">
+                            <p><strong>💵 Monto:</strong> $40,000 COP</p>
+                            <p><strong>📱 Nequi:</strong> 3001234567</p>
+                            <p><strong>📌 Referencia:</strong> ${urlUnique}</p>
+                            <p>Envía el comprobante a <strong>soporte@tuapp.com</strong></p>
+                        </div>
+                        <button onclick="window.location.href='dashboard.html'" style="background:#007bff; color:white; border:none; padding:10px 30px; border-radius:5px; cursor:pointer;">
+                            📋 Volver al Dashboard
+                        </button>
+                    </div>
+                `;
+
+                // Enviar email de tarjeta creada
+                await enviarEmailTarjetaCreada(tarjetaData[0], { email, nombre });
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Ocurrió un error inesperado. Por favor intenta de nuevo.');
+            }
+        }
+
+        // ============================================
+        // FUNCIONES DE EMAIL (con Supabase Edge Function)
+        // ============================================
+        async function enviarEmail(to, subject, html) {
+            try {
+                const response = await fetch(
+                    'https://tabfvwqhvvqtjjsplehx.supabase.co/functions/v1/send-email',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                        },
+                        body: JSON.stringify({ to, subject, html })
+                    }
+                );
+                return await response.json();
+            } catch (error) {
+                console.error('Error enviando email:', error);
+                return { success: false };
+            }
+        }
+
+        async function enviarEmailTarjetaCreada(tarjeta, usuario) {
+            const html = `
+                <h2>Hola ${usuario.nombre},</h2>
+                <p>Tu tarjeta ha sido creada. Realiza el pago para activarla:</p>
+                <p><strong>💵 Monto:</strong> $40,000 COP</p>
+                <p><strong>📱 Nequi:</strong> 3001234567</p>
+                <p><strong>📌 Referencia:</strong> ${tarjeta.url_unique}</p>
+                <a href="${window.location.origin}/ver-tarjeta.html?url=${tarjeta.url_unique}">Ver tarjeta</a>
+            `;
+            return await enviarEmail(usuario.email, '⏳ Tu tarjeta ha sido creada', html);
+        }
+    </script>
+
+</body>
+</html>
