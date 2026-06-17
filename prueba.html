@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Ayuda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background: #f4f7fc;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .btn-ayuda {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+        .btn-ayuda:hover { transform: scale(1.05); }
+        .modal-ayuda {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-ayuda.active { display: flex; }
+        .modal-contenido {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+        .modal-header h2 { margin: 0; }
+        .btn-cerrar {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+        .btn-cerrar:hover { color: #333; }
+        .paso {
+            display: none;
+            padding: 15px 0;
+        }
+        .paso.active { display: block; }
+        .navegacion {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+        .btn-paso {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-anterior {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-siguiente {
+            background: #667eea;
+            color: white;
+        }
+        .btn-final {
+            background: #28a745;
+            color: white;
+        }
+        .indicadores {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .indicador {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+        }
+        .indicador.active {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🚀 Prueba de Ayuda</h1>
+        <p>Esta es una app mínima para probar si el botón de ayuda funciona.</p>
+        <p>Haz clic en el botón de abajo.</p>
+    </div>
+
+    <!-- BOTÓN DE AYUDA -->
+    <button class="btn-ayuda" id="btnAyuda" onclick="abrirAyuda()">
+        💡 Ayuda
+    </button>
+
+    <!-- MODAL DE AYUDA -->
+    <div class="modal-ayuda" id="modalAyuda">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h2>📚 Guía</h2>
+                <button class="btn-cerrar" onclick="cerrarAyuda()">✕</button>
+            </div>
+
+            <div id="pasos">
+                <div class="paso active" data-paso="0">
+                    <h3>Paso 1: Crear tu cuenta</h3>
+                    <p>Regístrate con tu email y contraseña.</p>
+                </div>
+                <div class="paso" data-paso="1">
+                    <h3>Paso 2: Crear tu tarjeta</h3>
+                    <p>Completa el formulario con tus datos.</p>
+                </div>
+                <div class="paso" data-paso="2">
+                    <h3>Paso 3: Activar con Nequi</h3>
+                    <p>Realiza el pago de $40,000 COP.</p>
+                </div>
+                <div class="paso" data-paso="3">
+                    <h3>Paso 4: Compartir</h3>
+                    <p>Usa el QR o el enlace para compartir.</p>
+                </div>
+            </div>
+
+            <div class="navegacion">
+                <button class="btn-paso btn-anterior" onclick="pasoAnterior()">◀ Anterior</button>
+                <span id="indicadorPaso">1 / 4</span>
+                <button class="btn-paso btn-siguiente" onclick="pasoSiguiente()" id="btnSiguiente">Siguiente ▶</button>
+            </div>
+
+            <div class="indicadores" id="indicadores">
+                <span class="indicador active" onclick="irPaso(0)"></span>
+                <span class="indicador" onclick="irPaso(1)"></span>
+                <span class="indicador" onclick="irPaso(2)"></span>
+                <span class="indicador" onclick="irPaso(3)"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // SISTEMA DE AYUDA
+        // ============================================
+        let pasoActual = 0;
+        const totalPasos = 4;
+
+        function abrirAyuda() {
+            console.log('✅ Botón de ayuda presionado');
+            const modal = document.getElementById('modalAyuda');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            pasoActual = 0;
+            actualizarPaso();
+        }
+
+        function cerrarAyuda() {
+            const modal = document.getElementById('modalAyuda');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function pasoSiguiente() {
+            if (pasoActual < totalPasos - 1) {
+                pasoActual++;
+                actualizarPaso();
+            } else {
+                cerrarAyuda();
+            }
+        }
+
+        function pasoAnterior() {
+            if (pasoActual > 0) {
+                pasoActual--;
+                actualizarPaso();
+            }
+        }
+
+        function irPaso(index) {
+            pasoActual = index;
+            actualizarPaso();
+        }
+
+        function actualizarPaso() {
+            document.querySelectorAll('.paso').forEach(el => el.classList.remove('active'));
+            const pasoEl = document.querySelector(`.paso[data-paso="${pasoActual}"]`);
+            if (pasoEl) pasoEl.classList.add('active');
+
+            document.getElementById('indicadorPaso').textContent = `${pasoActual + 1} / ${totalPasos}`;
+
+            document.querySelectorAll('.indicador').forEach((el, index) => {
+                el.classList.toggle('active', index === pasoActual);
+            });
+
+            const btnSiguiente = document.getElementById('btnSiguiente');
+            if (pasoActual === totalPasos - 1) {
+                btnSiguiente.textContent = '✅ Finalizar';
+                btnSiguiente.className = 'btn-paso btn-final';
+            } else {
+                btnSiguiente.textContent = 'Siguiente ▶';
+                btnSiguiente.className = 'btn-paso btn-siguiente';
+            }
+        }
+    </script>
+
+</body>
+</html>
