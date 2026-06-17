@@ -5,44 +5,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Dashboard - Mi Tarjeta Digital</title>
 
-    <!-- ==========================================
-    SUPABASE JS
-    ========================================== -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- ==========================================
-    ESTILOS DEL SISTEMA DE AYUDA
-    ========================================== -->
     <style>
-        /* ===== BOTÓN FLOTANTE ===== */
-        .ayuda-tooltip {
+        /* ==========================================
+           ESTILOS DEL SISTEMA DE AYUDA (FUNCIONAL)
+           ========================================== */
+        .btn-ayuda {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            z-index: 9999;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #667eea;
             color: white;
-            padding: 15px 20px;
+            border: none;
             border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 15px 25px;
             font-size: 16px;
             font-weight: bold;
-            display: flex;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+            z-index: 9999;
+        }
+        .btn-ayuda:hover { transform: scale(1.05); }
+
+        .modal-ayuda {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
-            transition: transform 0.3s ease;
-            animation: pulse 2s infinite;
         }
-        .ayuda-tooltip:hover {
-            transform: scale(1.05);
+        .modal-ayuda.active { display: flex; }
+
+        .modal-contenido {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-        .ayuda-tooltip .icono { font-size: 24px; }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .modal-header h2 { margin: 0; color: #333; }
+
+        .btn-cerrar {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+        .btn-cerrar:hover { color: #333; }
+
+        .paso {
+            display: none;
+            padding: 15px 0;
+        }
+        .paso.active { display: block; }
+
+        .paso h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .paso p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .paso ul {
+            color: #666;
+            padding-left: 20px;
+        }
+
+        .navegacion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn-paso {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-anterior {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-anterior:hover { background: #e0e0e0; }
+
+        .btn-siguiente {
+            background: #667eea;
+            color: white;
+        }
+        .btn-siguiente:hover { transform: scale(1.02); }
+
+        .btn-final {
+            background: #28a745;
+            color: white;
+        }
+        .btn-final:hover { background: #218838; }
+
+        .indicadores {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .indicador {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .indicador.active {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+
         .badge-ayuda {
             position: absolute;
             top: -5px;
@@ -59,188 +168,9 @@
             font-weight: bold;
         }
 
-        /* ===== MODAL DE AYUDA ===== */
-        .modal-ayuda {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-ayuda.active {
-            display: flex;
-        }
-        .modal-ayuda-contenido {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            animation: slideUp 0.3s ease;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .modal-ayuda-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 15px;
-        }
-        .modal-ayuda-header h2 {
-            margin: 0;
-            color: #333;
-        }
-        .btn-cerrar-ayuda {
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: #999;
-            transition: color 0.3s;
-        }
-        .btn-cerrar-ayuda:hover {
-            color: #333;
-        }
-
-        /* ===== PASOS ===== */
-        .paso-ayuda {
-            display: none;
-            padding: 10px 0;
-        }
-        .paso-ayuda.active {
-            display: block;
-        }
-        .paso-ayuda .numero-paso {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            text-align: center;
-            line-height: 30px;
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        .paso-ayuda .titulo-paso {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            margin: 10px 0;
-        }
-        .paso-ayuda .descripcion-paso {
-            color: #666;
-            line-height: 1.6;
-            margin: 10px 0;
-        }
-
-        /* ===== NAVEGACIÓN ===== */
-        .navegacion-pasos {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #f0f0f0;
-        }
-        .btn-paso {
-            padding: 10px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .btn-paso-anterior {
-            background: #f0f0f0;
-            color: #333;
-        }
-        .btn-paso-anterior:hover {
-            background: #e0e0e0;
-        }
-        .btn-paso-siguiente {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .btn-paso-siguiente:hover {
-            transform: scale(1.02);
-        }
-        .btn-paso-final {
-            background: #28a745;
-            color: white;
-        }
-        .btn-paso-final:hover {
-            background: #218838;
-        }
-
-        /* ===== INDICADORES ===== */
-        .indicadores-pasos {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-top: 15px;
-        }
-        .indicador-paso {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #ddd;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .indicador-paso.active {
-            background: #667eea;
-            transform: scale(1.2);
-        }
-
-        /* ===== POPUP DE BIENVENIDA ===== */
-        .popup-bienvenida {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            border-radius: 15px;
-            padding: 20px 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            z-index: 9998;
-            display: none;
-            max-width: 90%;
-            text-align: center;
-            border-left: 5px solid #667eea;
-        }
-        .popup-bienvenida.show {
-            display: block;
-            animation: slideDown 0.5s ease;
-        }
-        @keyframes slideDown {
-            from { transform: translate(-50%, -100px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-        .popup-bienvenida .cerrar-popup {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #999;
-        }
-
-        /* ===== ESTILOS BÁSICOS ===== */
+        /* ==========================================
+           ESTILOS BÁSICOS DEL DASHBOARD
+           ========================================== */
         body {
             font-family: Arial, sans-serif;
             max-width: 600px;
@@ -305,175 +235,135 @@
         <form id="formularioTarjeta">
             <label>📌 Nombre completo</label>
             <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
-
             <label>💼 Cargo</label>
             <input type="text" id="cargo" placeholder="Ej: CEO">
-
             <label>🏢 Empresa</label>
             <input type="text" id="empresa" placeholder="Ej: Mi Empresa S.A.S">
-
             <label>📞 Teléfono</label>
             <input type="text" id="telefono" placeholder="Ej: 3001234567">
-
             <label>✉️ Email</label>
             <input type="email" id="email" placeholder="Ej: juan@empresa.com" required>
-
             <label>🖼️ Foto de perfil</label>
             <input type="file" id="imagenInput" accept="image/*">
-
             <div class="vista-previa" id="vistaPreviaImagen">
                 <p style="color:#999;">Selecciona una imagen profesional</p>
             </div>
-
             <button type="button" id="btnGuardar" onclick="guardarTarjeta()">🚀 Crear tarjeta</button>
         </form>
     </div>
 
-    <!-- ============================================
-    SISTEMA DE AYUDA
-    ============================================ -->
+    <!-- ==========================================
+    SISTEMA DE AYUDA (FUNCIONAL)
+    ========================================== -->
 
-    <!-- BOTÓN FLOTANTE -->
-    <div class="ayuda-tooltip" id="btnAyuda" onclick="abrirAyuda()">
-        <span class="icono">💡</span>
-        <span>¿Cómo funciona?</span>
-        <span class="badge-ayuda">1</span>
-    </div>
-
-    <!-- POPUP DE BIENVENIDA -->
-    <div class="popup-bienvenida" id="popupBienvenida">
-        <button class="cerrar-popup" onclick="cerrarPopupBienvenida()">✕</button>
-        <h3 style="margin:0 0 10px 0;">👋 ¡Bienvenido!</h3>
-        <p style="margin:0; color:#666;">
-            ¿Necesitas ayuda? Haz clic en el botón 💡 para ver una guía paso a paso.
-        </p>
-    </div>
+    <!-- BOTÓN DE AYUDA -->
+    <button class="btn-ayuda" id="btnAyuda" onclick="abrirAyuda()">
+        💡 Ayuda
+    </button>
 
     <!-- MODAL DE AYUDA -->
     <div class="modal-ayuda" id="modalAyuda">
-        <div class="modal-ayuda-contenido">
-            <div class="modal-ayuda-header">
+        <div class="modal-contenido">
+            <div class="modal-header">
                 <h2>📚 Guía de Uso</h2>
-                <button class="btn-cerrar-ayuda" onclick="cerrarAyuda()">✕</button>
+                <button class="btn-cerrar" onclick="cerrarAyuda()">✕</button>
             </div>
 
-            <div id="contenedorPasos">
-                <div class="paso-ayuda active" data-paso="0">
-                    <span class="numero-paso">1</span>
-                    <span class="titulo-paso">📝 Crear tu cuenta</span>
-                    <div class="descripcion-paso">
-                        <p>Regístrate con tu email y contraseña para comenzar.</p>
-                        <ul style="text-align:left; color:#666;">
-                            <li>✅ Usa un email válido</li>
-                            <li>✅ Contraseña de al menos 6 caracteres</li>
-                            <li>✅ Acepta los términos y condiciones</li>
-                        </ul>
-                    </div>
+            <div id="pasos">
+                <div class="paso active" data-paso="0">
+                    <h3>📝 Paso 1: Crear tu cuenta</h3>
+                    <p>Regístrate con tu email y contraseña para comenzar.</p>
+                    <ul>
+                        <li>✅ Usa un email válido</li>
+                        <li>✅ Contraseña de al menos 6 caracteres</li>
+                        <li>✅ Acepta los términos y condiciones</li>
+                    </ul>
                 </div>
-                <div class="paso-ayuda" data-paso="1">
-                    <span class="numero-paso">2</span>
-                    <span class="titulo-paso">🪪 Crear tu tarjeta</span>
-                    <div class="descripcion-paso">
-                        <p>Completa el formulario con tus datos profesionales.</p>
-                        <ul style="text-align:left; color:#666;">
-                            <li>📌 Nombre completo</li>
-                            <li>💼 Cargo y empresa</li>
-                            <li>📞 Teléfono de contacto</li>
-                            <li>✉️ Email profesional</li>
-                            <li>🖼️ Foto de perfil</li>
-                        </ul>
-                    </div>
+                <div class="paso" data-paso="1">
+                    <h3>🪪 Paso 2: Crear tu tarjeta</h3>
+                    <p>Completa el formulario con tus datos profesionales.</p>
+                    <ul>
+                        <li>📌 Nombre completo</li>
+                        <li>💼 Cargo y empresa</li>
+                        <li>📞 Teléfono de contacto</li>
+                        <li>✉️ Email profesional</li>
+                        <li>🖼️ Foto de perfil</li>
+                    </ul>
                 </div>
-                <div class="paso-ayuda" data-paso="2">
-                    <span class="numero-paso">3</span>
-                    <span class="titulo-paso">💰 Activación con Nequi</span>
-                    <div class="descripcion-paso">
-                        <p>Para activar tu tarjeta, realiza el pago:</p>
-                        <div style="background:#f8f9fa; border-radius:10px; padding:15px; margin:10px 0;">
-                            <p><strong>💵 Monto:</strong> $40,000 COP</p>
-                            <p><strong>📱 Nequi:</strong> 3001234567</p>
-                            <p><strong>📌 Referencia:</strong> El código único de tu tarjeta</p>
-                        </div>
-                    </div>
+                <div class="paso" data-paso="2">
+                    <h3>💰 Paso 3: Activación con Nequi</h3>
+                    <p>Para activar tu tarjeta, realiza el pago:</p>
+                    <ul>
+                        <li>💵 Monto: <strong>$40,000 COP</strong></li>
+                        <li>📱 Nequi: <strong>3001234567</strong></li>
+                        <li>📌 Referencia: El código único de tu tarjeta</li>
+                    </ul>
                 </div>
-                <div class="paso-ayuda" data-paso="3">
-                    <span class="numero-paso">4</span>
-                    <span class="titulo-paso">📤 Compartir tu tarjeta</span>
-                    <div class="descripcion-paso">
-                        <p>Una vez activa, comparte tu tarjeta:</p>
-                        <ul style="text-align:left; color:#666;">
-                            <li>📱 WhatsApp</li>
-                            <li>📷 Código QR</li>
-                            <li>🌐 Redes sociales</li>
-                        </ul>
-                    </div>
+                <div class="paso" data-paso="3">
+                    <h3>📤 Paso 4: Compartir tu tarjeta</h3>
+                    <p>Una vez activa, comparte tu tarjeta:</p>
+                    <ul>
+                        <li>📱 WhatsApp</li>
+                        <li>📷 Código QR</li>
+                        <li>🌐 Redes sociales</li>
+                    </ul>
                 </div>
-                <div class="paso-ayuda" data-paso="4">
-                    <span class="numero-paso">5</span>
-                    <span class="titulo-paso">📷 Código QR</span>
-                    <div class="descripcion-paso">
-                        <p>Usa el código QR en tu firma de email o imprímelo.</p>
-                        <div style="background:#e8f5e9; padding:10px; border-radius:8px;">
-                            <p>💡 Escanea con la cámara de cualquier celular.</p>
-                        </div>
-                    </div>
+                <div class="paso" data-paso="4">
+                    <h3>📷 Paso 5: Código QR</h3>
+                    <p>Usa el código QR en tu firma de email o imprímelo.</p>
+                    <p>💡 Escanea con la cámara de cualquier celular.</p>
                 </div>
-                <div class="paso-ayuda" data-paso="5">
-                    <span class="numero-paso">6</span>
-                    <span class="titulo-paso">🔄 Usos Gratis</span>
-                    <div class="descripcion-paso">
-                        <p>Cada tarjeta tiene <strong>20 usos gratis</strong>.</p>
-                        <div style="background:#fff3cd; border-radius:10px; padding:15px; margin:10px 0;">
-                            <p>Al llegar a 20, se bloquea automáticamente.</p>
-                            <p>Actívala con $40,000 COP por 1 año.</p>
-                        </div>
-                    </div>
+                <div class="paso" data-paso="5">
+                    <h3>🔄 Paso 6: Usos Gratis</h3>
+                    <p>Cada tarjeta tiene <strong>20 usos gratis</strong>.</p>
+                    <ul>
+                        <li>🔢 Al llegar a 20, se bloquea automáticamente.</li>
+                        <li>💰 Actívala con $40,000 COP por 1 año.</li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="navegacion-pasos">
-                <button class="btn-paso btn-paso-anterior" onclick="pasoAnterior()">◀ Anterior</button>
-                <span id="indicadorPaso" style="color:#999; font-size:14px;">1 / 6</span>
-                <button class="btn-paso btn-paso-siguiente" onclick="pasoSiguiente()" id="btnSiguiente">Siguiente ▶</button>
+            <div class="navegacion">
+                <button class="btn-paso btn-anterior" onclick="pasoAnterior()">◀ Anterior</button>
+                <span id="indicadorPaso" style="color:#999;">1 / 6</span>
+                <button class="btn-paso btn-siguiente" onclick="pasoSiguiente()" id="btnSiguiente">Siguiente ▶</button>
             </div>
 
-            <div class="indicadores-pasos" id="indicadoresPasos">
-                <span class="indicador-paso active" onclick="irPaso(0)"></span>
-                <span class="indicador-paso" onclick="irPaso(1)"></span>
-                <span class="indicador-paso" onclick="irPaso(2)"></span>
-                <span class="indicador-paso" onclick="irPaso(3)"></span>
-                <span class="indicador-paso" onclick="irPaso(4)"></span>
-                <span class="indicador-paso" onclick="irPaso(5)"></span>
+            <div class="indicadores" id="indicadores">
+                <span class="indicador active" onclick="irPaso(0)"></span>
+                <span class="indicador" onclick="irPaso(1)"></span>
+                <span class="indicador" onclick="irPaso(2)"></span>
+                <span class="indicador" onclick="irPaso(3)"></span>
+                <span class="indicador" onclick="irPaso(4)"></span>
+                <span class="indicador" onclick="irPaso(5)"></span>
             </div>
         </div>
     </div>
 
-    <!-- ============================================
+    <!-- ==========================================
     JAVASCRIPT
-    ============================================ -->
+    ========================================== -->
     <script>
         // ============================================
         // CONFIGURACIÓN DE SUPABASE
         // ============================================
         const SUPABASE_URL = 'https://tabfvwqhvvqtjjsplehx.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_zFqNv-oumnQ7GpHgLKfcYg_SdDlXE3p';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================
-        // SISTEMA DE AYUDA
+        // SISTEMA DE AYUDA (FUNCIONAL)
         // ============================================
         let pasoActual = 0;
         const totalPasos = 6;
 
         function abrirAyuda() {
+            console.log('✅ Botón de ayuda presionado');
             const modal = document.getElementById('modalAyuda');
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
             pasoActual = 0;
             actualizarPaso();
-            const badge = document.querySelector('.badge-ayuda');
-            if (badge) badge.style.display = 'none';
-            cerrarPopupBienvenida();
         }
 
         function cerrarAyuda() {
@@ -504,40 +394,25 @@
         }
 
         function actualizarPaso() {
-            document.querySelectorAll('.paso-ayuda').forEach(el => el.classList.remove('active'));
-            const pasoActualEl = document.querySelector(`.paso-ayuda[data-paso="${pasoActual}"]`);
-            if (pasoActualEl) pasoActualEl.classList.add('active');
+            document.querySelectorAll('.paso').forEach(el => el.classList.remove('active'));
+            const pasoEl = document.querySelector(`.paso[data-paso="${pasoActual}"]`);
+            if (pasoEl) pasoEl.classList.add('active');
+
             document.getElementById('indicadorPaso').textContent = `${pasoActual + 1} / ${totalPasos}`;
-            document.querySelectorAll('.indicador-paso').forEach((el, index) => {
+
+            document.querySelectorAll('.indicador').forEach((el, index) => {
                 el.classList.toggle('active', index === pasoActual);
             });
+
             const btnSiguiente = document.getElementById('btnSiguiente');
             if (pasoActual === totalPasos - 1) {
-                btnSiguiente.textContent = '✅ ¡Entendido!';
-                btnSiguiente.className = 'btn-paso btn-paso-final';
+                btnSiguiente.textContent = '✅ Finalizar';
+                btnSiguiente.className = 'btn-paso btn-final';
             } else {
                 btnSiguiente.textContent = 'Siguiente ▶';
-                btnSiguiente.className = 'btn-paso btn-paso-siguiente';
+                btnSiguiente.className = 'btn-paso btn-siguiente';
             }
         }
-
-        function mostrarPopupBienvenida() {
-            if (!localStorage.getItem('ayuda_vista')) {
-                const popup = document.getElementById('popupBienvenida');
-                popup.classList.add('show');
-                localStorage.setItem('ayuda_vista', 'true');
-                setTimeout(cerrarPopupBienvenida, 8000);
-            }
-        }
-
-        function cerrarPopupBienvenida() {
-            const popup = document.getElementById('popupBienvenida');
-            popup.classList.remove('show');
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(mostrarPopupBienvenida, 2000);
-        });
 
         // ============================================
         // FUNCIONES DE VALIDACIÓN Y GUARDADO
@@ -603,9 +478,9 @@
             try {
                 const fileName = `${Date.now()}_${file.name}`;
                 const filePath = `tarjetas/${fileName}`;
-                const { data, error } = await supabase.storage.from('tarjetas').upload(filePath, file);
+                const { data, error } = await supabaseClient.storage.from('tarjetas').upload(filePath, file);
                 if (error) return { error: error.message };
-                const { data: urlData } = supabase.storage.from('tarjetas').getPublicUrl(filePath);
+                const { data: urlData } = supabaseClient.storage.from('tarjetas').getPublicUrl(filePath);
                 return { publicUrl: urlData.publicUrl };
             } catch (error) {
                 return { error: error.message };
@@ -687,7 +562,7 @@
                     created_at: new Date().toISOString()
                 };
 
-                const { data, error } = await supabase.from('perfiles').insert([tarjetaData]).select();
+                const { data, error } = await supabaseClient.from('perfiles').insert([tarjetaData]).select();
                 if (error) {
                     alert('Error al guardar: ' + error.message);
                     return;
