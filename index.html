@@ -1,51 +1,30 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarjeta de Presentación Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ==========================================
-           ESTILOS PRINCIPALES
-           ========================================== */
-        body { font-family: Arial, sans-serif; background: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .container { background: #ffffff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        input, button, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; font-family: Arial, sans-serif; }
+        * { box-sizing: border-box; font-family: 'Poppins', system-ui, sans-serif; }
+        body { background: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { background: #ffffff; padding: 30px; border-radius: 24px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        input, button, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 14px; font-family: 'Poppins', sans-serif; }
         textarea { resize: vertical; min-height: 60px; }
-        button { background: #0070f3; color: white; border: none; font-weight: bold; cursor: pointer; font-size: 16px; }
-        button:disabled { background: #ccc; cursor: not-allowed; }
-        #mensaje { margin-top: 15px; font-weight: bold; font-size: 14px; min-height: 20px; }
-        .preview { margin-top: 10px; max-width: 100%; border-radius: 8px; display: none; }
+        button { background: linear-gradient(135deg, #0070f3, #005bb5); color: white; border: none; font-weight: 600; cursor: pointer; font-size: 16px; padding: 12px; border-radius: 12px; transition: all 0.3s; }
+        button:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(0,112,243,0.4); }
+        button:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+        #mensaje { margin-top: 15px; font-weight: 600; font-size: 14px; min-height: 20px; }
+        .preview { margin-top: 10px; max-width: 100%; border-radius: 12px; display: none; }
         .hidden { display: none; }
 
         /* ==========================================
            QR Y COMPARTIR
            ========================================== */
-        .qr-container {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f9fafb;
-            border-radius: 12px;
-            text-align: center;
-        }
-        .qr-container img {
-            width: 150px;
-            height: 150px;
-            margin: 10px auto;
-        }
-        .btn-compartir {
-            display: inline-block;
-            margin: 5px;
-            padding: 10px 18px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-        }
+        .qr-container { margin-top: 20px; padding: 20px; background: #f9fafb; border-radius: 16px; text-align: center; }
+        .qr-container img { width: 150px; height: 150px; margin: 10px auto; }
+        .btn-compartir { display: inline-block; margin: 5px; padding: 10px 18px; border: none; border-radius: 30px; cursor: pointer; font-size: 14px; font-weight: 600; color: white; text-decoration: none; transition: all 0.3s; }
+        .btn-compartir:hover { transform: scale(1.05); }
         .btn-whatsapp { background: #25D366; }
         .btn-facebook { background: #1877F2; }
         .btn-twitter { background: #000000; }
@@ -54,7 +33,7 @@
         .btn-cerrar-qr { background: #dc3545; }
 
         /* ==========================================
-           MODALES Y AYUDA
+           MODALES
            ========================================== */
         .modal {
             display: none;
@@ -71,7 +50,7 @@
         .modal-contenido {
             background: white;
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 24px;
             width: 90%;
             max-width: 400px;
             position: relative;
@@ -84,19 +63,11 @@
             cursor: pointer;
             color: #999;
         }
-        .btn-auth {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        .btn-auth { width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-auth:hover { transform: scale(1.02); }
         .btn-login { background: #0070f3; color: white; }
         .btn-registro { background: #6b7280; color: white; }
-        .toggle-auth { text-align: center; margin-top: 15px; color: #0070f3; cursor: pointer; font-size: 14px; }
+        .toggle-auth { text-align: center; margin-top: 15px; color: #0070f3; cursor: pointer; font-size: 14px; font-weight: 600; }
         .mensaje-auth { margin-top: 15px; font-size: 14px; text-align: center; }
 
         /* ==========================================
@@ -107,16 +78,16 @@
             bottom: 30px !important;
             right: 30px !important;
             z-index: 9999 !important;
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2) !important;
             color: white;
             border: none;
             border-radius: 50px;
             padding: 15px 25px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.5);
+            transition: all 0.3s;
         }
         .btn-ayuda:hover { transform: scale(1.05); }
 
@@ -136,7 +107,7 @@
 
         .modal-contenido-ayuda {
             background: white;
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 30px;
             max-width: 500px;
             width: 90%;
@@ -166,6 +137,7 @@
             font-size: 28px;
             cursor: pointer;
             color: #999;
+            transition: color 0.3s;
         }
         .btn-cerrar-ayuda:hover { color: #333; }
 
@@ -189,17 +161,17 @@
         .btn-paso {
             padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 30px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
+            font-weight: 600;
+            transition: all 0.3s;
         }
         .btn-anterior { background: #f0f0f0; color: #333; }
         .btn-anterior:hover { background: #e0e0e0; }
-        .btn-siguiente { background: #667eea; color: white; }
+        .btn-siguiente { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
         .btn-siguiente:hover { transform: scale(1.02); }
-        .btn-final { background: #28a745; color: white; }
-        .btn-final:hover { background: #218838; }
+        .btn-final { background: #22c55e; color: white; }
+        .btn-final:hover { background: #16a34a; }
 
         .indicadores {
             display: flex;
@@ -221,10 +193,29 @@
         }
 
         /* ==========================================
-           ANIMACIÓN DE CARGA PARA VALIDACIÓN
+           ANIMACIÓN DE CARGA
            ========================================== */
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+
+        /* ==========================================
+           BOTÓN DISEÑO
+           ========================================== */
+        .btn-diseno {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .btn-diseno:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
         }
 
         /* ==========================================
@@ -243,10 +234,10 @@
     <!-- ==========================================
     BARRA DE USUARIO
     ========================================== -->
-    <div style="background: #f0fdf4; padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+    <div style="background: #f0fdf4; padding: 10px 15px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <span id="userStatusDisplay">👤 No ha iniciado sesión</span>
-        <button id="abrirModalBtn" style="background: #0070f3; color: white; padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer;">🔐 Iniciar Sesión</button>
-        <button id="cerrarSesionBtn" style="background: #ef4444; color: white; padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; display: none;">🚪 Cerrar Sesión</button>
+        <button id="abrirModalBtn" style="background: #0070f3; color: white; padding: 8px 20px; border-radius: 30px; border: none; cursor: pointer; font-weight: 600;">🔐 Iniciar Sesión</button>
+        <button id="cerrarSesionBtn" style="background: #ef4444; color: white; padding: 8px 20px; border-radius: 30px; border: none; cursor: pointer; display: none; font-weight: 600;">🚪 Cerrar Sesión</button>
     </div>
 
     <!-- ==========================================
@@ -264,9 +255,9 @@
         <h2>📇 Crear Tarjeta de Presentación</h2>
 
         <!-- BANNER DE PROMOCIÓN -->
-        <div class="promocion-banner" style="background: #fef3c7; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #f59e0b; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-            <span style="color: #92400e; font-weight: bold;">⏳ Promoción de lanzamiento</span>
-            <span style="color: #92400e; font-weight: bold;">🔥 <span id="diasRestantes">10</span> días restantes</span>
+        <div class="promocion-banner" style="background: #fef3c7; padding: 10px 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #f59e0b; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+            <span style="color: #92400e; font-weight: 600;">⏳ Promoción de lanzamiento</span>
+            <span style="color: #92400e; font-weight: 600;">🔥 <span id="diasRestantes">10</span> días restantes</span>
         </div>
 
         <form id="form-tarjeta">
@@ -275,7 +266,7 @@
             <input type="tel" id="telefono" placeholder="Teléfono o WhatsApp." required>
             <input type="email" id="email_tarjeta" placeholder="Correo electrónico." required>
             <div style="text-align: left; margin: 10px 0 5px 0;">
-                <label style="font-weight: bold; font-size: 14px; color: #333;">🖼️ Examinar</label>
+                <label style="font-weight: 600; font-size: 14px; color: #333;">🖼️ Examinar</label>
             </div>
             <input type="file" id="imagen" accept="image/*" required>
             <p style="color: #999; font-size: 13px; margin-top: -5px;">No se ha encontrado ninguna tarjeta de presentación.</p>
@@ -283,8 +274,11 @@
             <button type="submit">💾 Guardar Tarjeta en la Nube</button>
         </form>
 
+        <!-- BOTÓN DE DISEÑO -->
+        <a href="diseno.html" target="_blank" class="btn-diseno">🎨 ¿Cómo diseñar mi tarjeta?</a>
+
         <!-- BOTÓN PARA MOSTRAR LLAVE BRE-B -->
-        <button id="btnMostrarLlave" style="background: #6b7280; margin-top: 10px;" onclick="mostrarLlaveBreB()">
+        <button id="btnMostrarLlave" style="background: #6b7280; margin-top: 10px; border-radius: 30px;" onclick="mostrarLlaveBreB()">
             🔑 Mostrar llave Bre-B para transferencias
         </button>
 
@@ -298,8 +292,8 @@
         <h3>🎉 ¡Tarjeta creada con éxito!</h3>
 
         <!-- MENSAJE DE VALIDACIÓN -->
-        <div id="mensajeValidacion" style="display: none; background: #fef3c7; padding: 15px; border-radius: 10px; margin: 10px 0; border: 1px solid #f59e0b;">
-            <p style="color: #92400e; font-weight: bold; margin: 0;">⏳ Revisión de imagen en proceso</p>
+        <div id="mensajeValidacion" style="display: none; background: #fef3c7; padding: 15px; border-radius: 12px; margin: 10px 0; border: 1px solid #f59e0b;">
+            <p style="color: #92400e; font-weight: 600; margin: 0;">⏳ Revisión de imagen en proceso</p>
             <p style="color: #92400e; margin: 5px 0 0 0;">Esto puede tomar unos minutos mientras verificamos el contenido de tu imagen.</p>
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
                 <div style="width: 20px; height: 20px; border: 3px solid #f59e0b; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
@@ -308,8 +302,8 @@
         </div>
 
         <!-- INFO DE PAGO BRE-B -->
-        <div id="infoPagoBreB" style="background: #f0fdf4; padding: 15px; border-radius: 10px; margin: 10px 0; border: 1px solid #22c55e;">
-            <p style="color: #166534; font-weight: bold; margin: 0;">💰 Activa tu tarjeta ahora</p>
+        <div id="infoPagoBreB" style="background: #f0fdf4; padding: 15px; border-radius: 12px; margin: 10px 0; border: 1px solid #22c55e;">
+            <p style="color: #166534; font-weight: 600; margin: 0;">💰 Activa tu tarjeta ahora</p>
             <p style="color: #166534; margin: 5px 0 0 0;">Paga <strong>$40,000 COP por un año</strong> o pagos bimestrales de <strong>$10,000</strong>.</p>
             <p style="color: #166534; margin: 5px 0 0 0;">📱 Llave Bre-B: <strong style="color: #0070f3;">0092618602</strong></p>
             <p style="color: #166534; margin: 5px 0 0 0;">✅ Activación inmediata al confirmar el pago.</p>
@@ -317,8 +311,8 @@
 
         <div id="qrCodeDiv" style="display: inline-block; margin: 10px auto;"></div>
         <p><strong>🔗 Enlace público:</strong></p>
-        <p id="enlacePublico" style="word-break: break-all; font-size: 12px; background: #f3f4f6; padding: 8px; border-radius: 5px;"></p>
-        
+        <p id="enlacePublico" style="word-break: break-all; font-size: 12px; background: #f3f4f6; padding: 8px; border-radius: 8px;"></p>
+
         <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 15px;">
             <button class="btn-compartir btn-whatsapp" onclick="compartirWhatsApp()">📱 WhatsApp</button>
             <button class="btn-compartir btn-facebook" onclick="compartirFacebook()">📘 Facebook</button>
@@ -337,17 +331,17 @@ MODAL DE AUTENTICACIÓN
     <div class="modal-contenido">
         <span id="cerrarModal" class="modal-cerrar">&times;</span>
         <h3 id="modalTitulo" style="text-align: center;">Iniciar Sesión</h3>
-        <input type="email" id="modalEmail" placeholder="Correo electrónico" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc;">
-        <input type="password" id="modalPassword" placeholder="Contraseña" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc;">
-        
+        <input type="email" id="modalEmail" placeholder="Correo electrónico" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 12px; border: 1px solid #ccc;">
+        <input type="password" id="modalPassword" placeholder="Contraseña" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 12px; border: 1px solid #ccc;">
+
         <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
             <input type="checkbox" id="consentimiento" style="width: 20px; margin: 0;">
             <label for="consentimiento" style="font-size: 12px; text-align: left; margin: 0;">
-                 He leído y acepto los <a href="https://terminos.vercel.app" target="_blank">Términos y Condiciones</a> y la  
+                 He leído y acepto los <a href="https://terminos.vercel.app" target="_blank">Términos y Condiciones</a> y la
                 <a href="https://privacidad.vercel.app" target="_blank">Política de Privacidad</a>
             </label>
         </div>
-        
+
         <button id="modalAccionBtn" class="btn-auth btn-login">Iniciar Sesión</button>
         <div id="modalMensaje" class="mensaje-auth"></div>
         <div id="toggleAuthLink" class="toggle-auth">¿No tiene cuenta? Regístrese</div>
@@ -358,17 +352,17 @@ MODAL DE AUTENTICACIÓN
 MODAL DE LLAVE BRE-B
 ========================================== -->
 <div id="modalLlave" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 10000;">
-    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%; text-align: center; position: relative;">
+    <div style="background: white; padding: 30px; border-radius: 24px; max-width: 400px; width: 90%; text-align: center; position: relative;">
         <button onclick="cerrarModalLlave()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer;">✕</button>
         <h3>🔑 Llave Bre-B para transferencias</h3>
-        <p style="font-size: 24px; font-weight: bold; color: #0070f3; padding: 10px; background: #f3f4f6; border-radius: 8px; letter-spacing: 2px;">
+        <p style="font-size: 24px; font-weight: 700; color: #0070f3; padding: 10px; background: #f3f4f6; border-radius: 12px; letter-spacing: 2px;">
             0092618602
         </p>
         <p style="font-size: 14px; color: #666;">Usa esta llave para recibir pagos desde cualquier banco o billetera digital.</p>
-        <button onclick="copiarLlave()" style="background: #0070f3; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px;">
+        <button onclick="copiarLlave()" style="background: #0070f3; color: white; border: none; padding: 10px 20px; border-radius: 30px; cursor: pointer; margin-top: 10px; font-weight: 600;">
             📋 Copiar llave
         </button>
-        <button onclick="cerrarModalLlave()" style="background: #6b7280; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; margin-left: 10px;">
+        <button onclick="cerrarModalLlave()" style="background: #6b7280; color: white; border: none; padding: 10px 20px; border-radius: 30px; cursor: pointer; margin-top: 10px; margin-left: 10px; font-weight: 600;">
             Cerrar
         </button>
     </div>
@@ -395,8 +389,8 @@ SISTEMA DE AYUDA (BOTÓN + MODAL)
                 <p>¡Olvídate de las tarjetas de papel que siempre se pierden y no se pueden actualizar! 🌐</p>
                 <p>Si manejas un negocio, prestas servicios o vendes lo que sea, tu publicidad debe ser digital, visual y rápida.</p>
                 <p>Regístrate en nuestra app, ingresa tus datos y genera al instante tu tarjeta de presentación en formato de imagen profesional.</p>
-                
-                <p style="font-weight: bold; margin-top: 15px;">Es la solución publicitaria perfecta para:</p>
+
+                <p style="font-weight: 600; margin-top: 15px;">Es la solución publicitaria perfecta para:</p>
                 <ul>
                     <li>🛍️ <strong>Almacenes y Comercio:</strong> Tiendas de ropa, calzado, tecnología y todo tipo de ventas.</li>
                     <li>🏢 <strong>Empresas y Emprendimientos:</strong> Marcas en crecimiento que buscan verse más corporativas.</li>
@@ -404,17 +398,17 @@ SISTEMA DE AYUDA (BOTÓN + MODAL)
                     <li>🎭 <strong>Eventos y Ocio:</strong> Organizadores, discotecas, salones de fiestas y centros recreativos.</li>
                     <li>🛠️ <strong>Profesionales y Oficios:</strong> Médicos, abogados, mecánicos, electricistas, estilistas y trabajadores independientes.</li>
                 </ul>
-                
+
                 <p>¡Y un sinnúmero de posibilidades más! Cualquier actividad que necesite clientes puede promocionarse aquí.</p>
                 <p>La app te entrega una imagen impecable para WhatsApp, una URL única para tus redes sociales y un código QR para que te escaneen directamente desde la pantalla de tu celular o en la vitrina de tu local.</p>
-                
-                <div style="background: #fef3c7; padding: 15px; border-radius: 10px; margin-top: 15px; border: 2px solid #f59e0b;">
-                    <p style="font-weight: bold; color: #92400e; margin: 0; font-size: 18px;">🔥 ¡SOLO QUEDAN 10 DÍAS de promoción!</p>
+
+                <div style="background: #fef3c7; padding: 15px; border-radius: 12px; margin-top: 15px; border: 2px solid #f59e0b;">
+                    <p style="font-weight: 700; color: #92400e; margin: 0; font-size: 18px;">🔥 ¡SOLO QUEDAN 10 DÍAS de promoción!</p>
                     <p style="color: #92400e; margin: 5px 0 0 0;">Asegura tu registro sin costo ahora mismo.</p>
                     <p style="color: #92400e; margin: 5px 0 0 0;">👉 <strong>Crea tu cuenta gratis aquí antes de que termine la promoción</strong></p>
                     <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
-                        <span style="background: #92400e; color: white; padding: 5px 12px; border-radius: 5px; font-weight: bold;">10</span>
-                        <span style="color: #92400e; font-weight: bold;">días</span>
+                        <span style="background: #92400e; color: white; padding: 5px 12px; border-radius: 20px; font-weight: 700;">10</span>
+                        <span style="color: #92400e; font-weight: 600;">días</span>
                     </div>
                 </div>
             </div>
@@ -430,7 +424,7 @@ SISTEMA DE AYUDA (BOTÓN + MODAL)
                 </ul>
             </div>
 
-            <!-- PASO 2 -->
+            <!-- PASO 2 (CON ENLACE A DISEÑO) -->
             <div class="paso" data-paso="2">
                 <h3>🪪 Paso 2: Crear tu tarjeta</h3>
                 <p>Completa el formulario con tus datos:</p>
@@ -442,15 +436,25 @@ SISTEMA DE AYUDA (BOTÓN + MODAL)
                     <li>🖼️ <strong>Examinar</strong> (logo o foto de perfil)</li>
                 </ul>
                 <p style="margin-top: 10px;">La URL de tu tarjeta se genera automáticamente.</p>
+
+                <!-- NUEVO ENLACE A DISEÑO -->
+                <div style="background: #f0f7ff; padding: 12px 15px; border-radius: 12px; margin-top: 15px; border-left: 4px solid #0070f3;">
+                    <p style="margin: 0; font-size: 14px;">
+                        🎨 ¿Necesitas ayuda para diseñar tu tarjeta?
+                        <a href="diseno.html" target="_blank" style="color: #0070f3; font-weight: 600; text-decoration: none;">
+                            📐 Ver guía de diseño aquí
+                        </a>
+                    </p>
+                </div>
             </div>
 
-            <!-- PASO 3 CORREGIDO -->
+            <!-- PASO 3 -->
             <div class="paso" data-paso="3">
                 <h3>💰 Paso 3: Activación con Nequi (Bre-B)</h3>
                 <p>Para activar tu tarjeta, realiza el pago a través del sistema Bre-B:</p>
                 <ul>
                     <li>💵 <strong>$40,000 COP por un año</strong>, o pagos bimestrales de <strong>$10,000</strong> hasta completar los $40,000 COP por un año completo.</li>
-                    <li>📱 <strong>Llave Bre-B:</strong> <span style="font-weight: bold; color: #0070f3;">0092618602</span></li>
+                    <li>📱 <strong>Llave Bre-B:</strong> <span style="font-weight: 700; color: #0070f3;">0092618602</span></li>
                     <li>💳 <strong>PULSA EL BOTÓN DE PAGO Y MANDAS EL COMPROBANTE DE PAGO.</strong></li>
                     <li>⏳ <strong>Activación inmediata:</strong> Una vez confirmado el pago, tu tarjeta se activa al instante.</li>
                 </ul>
@@ -475,7 +479,7 @@ SISTEMA DE AYUDA (BOTÓN + MODAL)
                 <p>💡 Escanea con la cámara de cualquier celular.</p>
             </div>
 
-            <!-- PASO 6 CORREGIDO -->
+            <!-- PASO 6 -->
             <div class="paso" data-paso="6">
                 <h3>🔄 Paso 6: Usos Gratis y Bloqueo</h3>
                 <p>Cada tarjeta tiene <strong>5 usos gratis</strong> y <strong>navegación gratuita para promocionarse nacional e internacional</strong>.</p>
@@ -620,23 +624,23 @@ function mostrarQR(url) {
     ultimaUrl = url;
     document.getElementById('seccionQR').classList.remove('hidden');
     document.getElementById('enlacePublico').textContent = url;
-    
+
     const qrDiv = document.getElementById('qrCodeDiv');
     qrDiv.innerHTML = '';
-    
+
     const qr = new QRCode(qrDiv, {
         text: url,
         width: 150,
         height: 150
     });
-    
+
     setTimeout(() => {
         const canvas = qrDiv.querySelector('canvas');
         if (canvas) {
             ultimoQrCanvas = canvas;
         }
     }, 100);
-    
+
     localStorage.setItem('ultimaTarjeta', JSON.stringify({ url: url }));
 }
 
@@ -659,17 +663,17 @@ function actualizarContador() {
     const fechaInicio = new Date('2026-06-18');
     const fechaFin = new Date(fechaInicio);
     fechaFin.setDate(fechaFin.getDate() + 10);
-    
+
     const hoy = new Date();
     const diffTime = fechaFin - hoy;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     const diasRestantes = Math.max(0, diffDays);
     const elemento = document.getElementById('diasRestantes');
     if (elemento) {
         elemento.textContent = diasRestantes;
     }
-    
+
     if (diasRestantes === 0) {
         const promocionDiv = document.querySelector('.promocion-banner');
         if (promocionDiv) {
@@ -730,7 +734,7 @@ form.onsubmit = async function(e) {
     e.preventDefault();
     const boton = form.querySelector('button');
     boton.disabled = true;
-    
+
     document.getElementById('mensajeValidacion').style.display = 'block';
     messageText.style.color = "orange";
     messageText.innerText = "⏳ Validando imagen... esto puede tomar unos minutos";
@@ -738,9 +742,9 @@ form.onsubmit = async function(e) {
     try {
         const archivo = inputImagen.files[0];
         if (!archivo) throw new Error("Selecciona una imagen");
-        
+
         const nombreArchivo = `${Date.now()}_${archivo.name}`;
-        
+
         const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/tarjetas/${nombreArchivo}`, {
             method: 'POST',
             headers: {
@@ -749,21 +753,21 @@ form.onsubmit = async function(e) {
             },
             body: archivo
         });
-        
+
         if (!uploadRes.ok) {
             const error = await uploadRes.text();
             throw new Error(`Error subiendo imagen: ${error}`);
         }
-        
+
         const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/tarjetas/${nombreArchivo}`;
-        
+
         const urlAmigable = document.getElementById('titulo').value
             .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
             .replace(/\s+/g, '-')
             .replace(/[^a-z0-9-]/g, '') + '-' + Date.now().toString(36);
-        
+
         const datos = {
             titulo: document.getElementById('titulo').value,
             subtitulo: document.getElementById('subtitulo').value,
@@ -774,7 +778,7 @@ form.onsubmit = async function(e) {
             usos: 0,
             bloqueada: false
         };
-        
+
         const response = await fetch(`${SUPABASE_URL}/rest/v1/perfiles`, {
             method: 'POST',
             headers: {
@@ -784,25 +788,25 @@ form.onsubmit = async function(e) {
             },
             body: JSON.stringify(datos)
         });
-        
+
         document.getElementById('mensajeValidacion').style.display = 'none';
-        
+
         if (response.ok) {
             messageText.style.color = "green";
             messageText.innerText = "🎉 ¡Tarjeta guardada con éxito!";
-            
+
             const enlaceCompleto = window.location.origin + window.location.pathname.replace('index.html', '') + `ver-tarjeta.html?url=${urlAmigable}`;
-            
+
             mostrarQR(enlaceCompleto);
-            
+
             form.reset();
             preview.style.display = 'none';
-            
+
         } else {
             const error = await response.json();
             throw new Error(error.message || "Error al guardar");
         }
-        
+
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('mensajeValidacion').style.display = 'none';
@@ -927,7 +931,7 @@ function actualizarBarraUsuario() {
     const userSpan = document.getElementById('userStatusDisplay');
     const abrirBtn = document.getElementById('abrirModalBtn');
     const cerrarBtn = document.getElementById('cerrarSesionBtn');
-    
+
     if (sesion && sesion.user) {
         userSpan.innerHTML = `✅ Conectado como: ${sesion.user.email}`;
         abrirBtn.style.display = 'none';
@@ -946,17 +950,17 @@ function actualizarBarraUsuario() {
 modalAccionBtn.addEventListener('click', async () => {
     const email = modalEmail.value.trim();
     const password = modalPassword.value;
-    
+
     if (!email || !password) {
         mostrarMensajeModal('Complete correo y contraseña');
         return;
     }
-    
+
     if (!esModoLogin && password.length < 6) {
         mostrarMensajeModal('La contraseña debe tener al menos 6 caracteres');
         return;
     }
-    
+
     if (!esModoLogin) {
         const consentimiento = document.getElementById('consentimiento');
         if (!consentimiento || !consentimiento.checked) {
@@ -966,10 +970,10 @@ modalAccionBtn.addEventListener('click', async () => {
             return;
         }
     }
-    
+
     modalAccionBtn.disabled = true;
     modalAccionBtn.innerText = esModoLogin ? 'Ingresando...' : 'Registrando...';
-    
+
     try {
         let resultado;
         if (esModoLogin) {
@@ -977,7 +981,7 @@ modalAccionBtn.addEventListener('click', async () => {
         } else {
             resultado = await registrarUsuario(email, password);
         }
-        
+
         if (resultado.access_token) {
             guardarSesion(resultado);
             actualizarBarraUsuario();
