@@ -1,0 +1,13 @@
+Primer murl  https://tarjeta-de-presentacion-digital.vercel.app  este abre el registro para rellenar los datos, corrige el correo si no esta bien hecho, sube imagen, guarda la imagen ,crea el correo y la url, si utilzas la url para ver la tarjeta que subistes te muestra la tarjeta.Descarga el url en el pc o celular.descarga el qr para compartir  la imagen de la tarjeta, si compruebas el qr te muestra la tarjeta y loas redes sociales para compartir. ESTA SE LLAMA REGISTRARSE. Esta lo que no se le habia implementado es, la ayuda, y no tiene aun terminos y condiciones.
+
+
+el seguno url : https://tarjeta-de-presentacion-digital.vercel.app/dashboard.html. Este tiene la ayuda, y tiene una tarjeta de registro, con nombre diferentes a la anterior los cuales te comente que habia que cambiarlos, a la ayuda tambien hacer esos cambios. Est5a se llama es crear una tarjeta, pero esa no deberia ser la tarjeta como te dije .
+
+
+El tercer  es ver tartjeta creada esta url:  https://tarjeta-de-presentacion-digital.vercel.app/ver-tarjeta.html?url=XXXXX
+es la url que se crea  en el primer url para ver tarjetas creadas despues de subirla y de crear el qr.
+
+el cuarto url:  https://tarjeta-de-presentacion-digital.vercel.app/admin.html este me pide la contraseña , si me equivoco me muestra acceso denegado si esta correcta  me abre y me muestra el informe de pagos y aprobaciones.
+esta in seccion de ver imagen y  sale que no se encuentra.
+
+ 

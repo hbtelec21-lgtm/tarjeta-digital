@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta de Presentación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .contenedor-imagen {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .imagen-tarjeta {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 16px;
+        }
+        .mensaje {
+            text-align: center;
+            padding: 40px;
+            font-family: system-ui, sans-serif;
+            color: #666;
+        }
+        .compartir-container {
+            margin-top: 30px;
+            text-align: center;
+            font-family: system-ui, sans-serif;
+        }
+        .compartir-container h3 {
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .botones-redes {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        .btn-red {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-whatsapp { background: #25D366; color: white; }
+        .btn-whatsapp:hover { background: #128C7E; }
+        .btn-facebook { background: #1877F2; color: white; }
+        .btn-facebook:hover { background: #0d5bbd; }
+        .btn-twitter { background: #1DA1F2; color: white; }
+        .btn-twitter:hover { background: #0d8bd9; }
+        .btn-linkedin { background: #0077B5; color: white; }
+        .btn-linkedin:hover { background: #005e8c; }
+        .btn-telegram { background: #0088cc; color: white; }
+        .btn-telegram:hover { background: #006699; }
+        .btn-copiar { background: #6b7280; color: white; }
+        .btn-copiar:hover { background: #4b5563; }
+        .pago-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 16px;
+            text-align: center;
+        }
+        .pago-container h3 {
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+        .instrucciones {
+            background: #f0fdf4;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        .instrucciones ol {
+            margin-left: 20px;
+        }
+        .instrucciones li {
+            margin: 8px 0;
+        }
+        form input, form button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        form button {
+            background: #0070f3;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        form button:hover {
+            background: #005bb5;
+        }
+        .mensaje-exito {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .mensaje-error {
+            color: #ef4444;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="contenedor-imagen" id="contenedor">
+    <div class="mensaje">Cargando tarjeta...</div>
+</div>
+
+<script>
+    const SUPABASE_URL = 'https://tabfvwqhvvqtjjsplehx.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_zFqNv-oumnQ7GpHgLKfcYg_SdDlXE3p';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let urlUnica = urlParams.get('url');
+    
+    if (urlUnica) {
+        urlUnica = urlUnica.toLowerCase().trim();
+    }
+
+    async function cargarTarjeta() {
+        const contenedor = document.getElementById('contenedor');
+        
+        if (!urlUnica) {
+            contenedor.innerHTML = '<div class="mensaje">❌ No se especificó qué tarjeta buscar</div>';
+            return;
+        }
+
+        try {
+            const respuesta = await fetch(`${SUPABASE_URL}/rest/v1/perfiles?url_unique=ilike.${urlUnica}&select=*`, {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const datos = await respuesta.json();
+
+            if (!datos || datos.length === 0) {
+                contenedor.innerHTML = `<div class="mensaje">❌ Tarjeta no encontrada: ${urlUnica}</div>`;
+                return;
+            }
+
+            const tarjeta = datos[0];
+
+            // ========== TARJETA BLOQUEADA - MOSTRAR FORMULARIO DE PAGO ==========
+            if (tarjeta.bloqueada === true) {
+                contenedor.innerHTML = `
+                    <div class="pago-container">
+                        <h2 style="color: #dc2626;">🔒 Tarjeta Bloqueada</h2>
+                        <p>Su tarjeta <strong>${tarjeta.titulo}</strong> ha alcanzado el límite de <strong>20 usos gratuitos</strong>.</p>
+                        <p>Por solo <strong style="color: #0070f3; font-size: 24px;">$10 USD (40,000 COP)</strong> puede desbloquearla por <strong>1 año completo</strong> sin publicidad y con usos ilimitados.</p>
+                        
+                        <div class="instrucciones">
+                            <h3>📱 Pagar con Nequi</h3>
+                            <ol>
+                                <li>Abra Nequi y transfiera <strong>$40,000 COP</strong> al alias <strong>@HBT.Electronica</strong></li>
+                                <li>En la referencia, escriba: <strong>${tarjeta.url_unique}</strong></li>
+                                <li>Tome una captura de pantalla del comprobante</li>
+                                <li>Complete el formulario abajo y adjunte el comprobante</li>
+                            </ol>
+                        </div>
+                        
+                        <form id="form-pago">
+                            <input type="text" id="nombre_pagador" placeholder="Su nombre completo" required>
+                            <input type="email" id="email_pagador" placeholder="Su correo electrónico" value="${tarjeta.email || ''}" required>
+                            <input type="text" id="referencia" placeholder="Referencia" value="${tarjeta.url_unique}" required>
+                            <input type="file" id="comprobante" accept="image/*" required>
+                            <button type="submit">📤 Enviar comprobante de pago</button>
+                        </form>
+                        <div id="mensajePago" style="margin-top: 15px; font-size: 14px;"></div>
+                    </div>
+                `;
+                
+                // Agregar evento al formulario
+                setTimeout(() => {
+                    const formPago = document.getElementById('form-pago');
+                    if (formPago) {
+                        formPago.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            await enviarComprobante(tarjeta);
+                        });
+                    }
+                }, 100);
+                return;
+            }
+            // ========== FIN PAGO ==========
+
+            // Mostrar tarjeta desbloqueada (normal)
+            const urlCompleta = window.location.href;
+            const tituloCompartir = encodeURIComponent(`${tarjeta.titulo} - ${tarjeta.subtitulo}`);
+            const urlCompartir = encodeURIComponent(urlCompleta);
+
+            if (tarjeta.image_url) {
+                contenedor.innerHTML = `
+                    <img src="${tarjeta.image_url}" class="imagen-tarjeta" alt="Tarjeta de presentación" onerror="this.src='https://placehold.co/600x400?text=Error+al+cargar+imagen'">
+                    <div class="compartir-container">
+                        <h3>📱 Compartir tarjeta</h3>
+                        <div class="botones-redes">
+                            <a href="https://wa.me/?text=${tituloCompartir}%20-%20${urlCompartir}" target="_blank" class="btn-red btn-whatsapp">📱 WhatsApp</a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=${urlCompartir}" target="_blank" class="btn-red btn-facebook">📘 Facebook</a>
+                            <a href="https://twitter.com/intent/tweet?text=${tituloCompartir}&url=${urlCompartir}" target="_blank" class="btn-red btn-twitter">🐦 Twitter</a>
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url=${urlCompartir}&title=${tituloCompartir}" target="_blank" class="btn-red btn-linkedin">🔗 LinkedIn</a>
+                            <a href="https://t.me/share/url?url=${urlCompartir}&text=${tituloCompartir}" target="_blank" class="btn-red btn-telegram">✈️ Telegram</a>
+                            <button onclick="copiarEnlace()" class="btn-red btn-copiar">📋 Copiar enlace</button>
+                        </div>
+                    </div>
+                `;
+                document.title = `${tarjeta.titulo} - ${tarjeta.subtitulo} | Tarjeta Digital`;
+            } else {
+                contenedor.innerHTML = `<div class="mensaje">📇 No se ha subido ninguna imagen de tarjeta</div>`;
+            }
+
+            // Actualizar contador
+            const nuevosUsos = (tarjeta.usos || 0) + 1;
+            const nuevaBloqueada = nuevosUsos >= 20;
+            
+            await fetch(`${SUPABASE_URL}/rest/v1/perfiles?url_unique=ilike.${urlUnica}`, {
+                method: 'PATCH',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    usos: nuevosUsos,
+                    bloqueada: nuevaBloqueada
+                })
+            });
+
+        } catch (error) {
+            console.error('Error:', error);
+            contenedor.innerHTML = `<div class="mensaje">❌ Error al cargar la tarjeta</div>`;
+        }
+    }
+
+    async function enviarComprobante(tarjeta) {
+        const nombrePagador = document.getElementById('nombre_pagador').value;
+        const emailPagador = document.getElementById('email_pagador').value;
+        const referencia = document.getElementById('referencia').value;
+        const archivo = document.getElementById('comprobante').files[0];
+        const mensajeDiv = document.getElementById('mensajePago');
+        
+        if (!archivo) {
+            mensajeDiv.innerHTML = '<span class="mensaje-error">❌ Adjunte el comprobante de pago</span>';
+            return;
+        }
+        
+        mensajeDiv.innerHTML = '<span style="color: orange;">⏳ Enviando comprobante...</span>';
+        
+        try {
+            // Subir comprobante a Supabase Storage
+            const nombreArchivo = `comprobante_${Date.now()}_${archivo.name}`;
+            const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/comprobantes/${nombreArchivo}`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                },
+                body: archivo
+            });
+            
+            if (!uploadRes.ok) throw new Error('Error al subir comprobante');
+            
+            const comprobanteUrl = `${SUPABASE_URL}/storage/v1/object/public/comprobantes/${nombreArchivo}`;
+            
+            // Guardar solicitud de pago en la tabla 'pagos'
+            const pagoData = {
+                tarjeta_id: tarjeta.id,
+                email_usuario: emailPagador,
+                nombre_tarjeta: tarjeta.titulo,
+                url_unique: tarjeta.url_unique,
+                monto: '40000 COP',
+                comprobante_url: comprobanteUrl,
+                estado: 'pendiente'
+            };
+            
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/pagos`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(pagoData)
+            });
+            
+            if (!response.ok) throw new Error('Error al guardar solicitud');
+            
+            mensajeDiv.innerHTML = `
+                <span class="mensaje-exito">✅ Comprobante recibido. En máximo 24 horas desbloquearemos su tarjeta.</span>
+                <br><span style="font-size: 12px;">📧 Recibirá un correo de confirmación a: ${emailPagador}</span>
+            `;
+            
+            // Limpiar formulario
+            const formPago = document.getElementById('form-pago');
+            if (formPago) formPago.reset();
+            
+        } catch (error) {
+            console.error('Error:', error);
+            mensajeDiv.innerHTML = `<span class="mensaje-error">❌ Error: ${error.message}</span>`;
+        }
+    }
+
+    function copiarEnlace() {
+        const enlace = window.location.href;
+        navigator.clipboard.writeText(enlace);
+        alert('✅ Enlace copiado al portapapeles');
+    }
+
+    cargarTarjeta();
+</script>
+</body>
+</html>

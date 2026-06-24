@@ -1,0 +1,243 @@
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda de diseño - Crear tu tarjeta</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #6b7280;
+        }
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            color: #0070f3;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 10px 0 0;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #0070f3;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #005bb5;
+        }
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        .btn-whatsapp:hover {
+            background: #128C7E;
+        }
+        .btn-canva {
+            background: #00C4CC;
+            color: white;
+        }
+        .btn-canva:hover {
+            background: #00a3aa;
+        }
+        .paso {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 4px solid #0070f3;
+        }
+        .paso strong {
+            color: #0070f3;
+        }
+        .precios {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .plan {
+            flex: 1;
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            min-width: 200px;
+        }
+        .plan h3 {
+            margin-top: 0;
+        }
+        .precio {
+            font-size: 28px;
+            font-weight: bold;
+            color: #0070f3;
+        }
+        .volver {
+            display: inline-block;
+            background: #6b7280;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .volver:hover {
+            background: #4b5563;
+        }
+        hr {
+            margin: 30px 0;
+            border: none;
+            border-top: 1px solid #e5e7eb;
+        }
+        ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🎨 Ayuda para diseñar tu tarjeta de presentación</h1>
+        <p>Elige cómo quieres crear tu tarjeta: gratis con Canva o profesional con nuestro equipo</p>
+    </div>
+
+    <!-- Opción 1: Canva gratis -->
+    <div class="card">
+        <h2>📱 Opción 1: Diseña tu tarjeta GRATIS con Canva</h2>
+        <p>Canva es una herramienta fácil de usar. Tiene plantillas profesionales gratuitas.</p>
+        
+        <div class="paso">
+            <strong>Paso 1:</strong> Haz clic en el botón "Abrir Canva" y crea una cuenta gratis (o inicia sesión)
+        </div>
+        <div class="paso">
+            <strong>Paso 2:</strong> Busca "Tarjeta de presentación" y elige una plantilla que te guste
+        </div>
+        <div class="paso">
+            <strong>Paso 3:</strong> Edita con tu nombre, teléfono, logo y colores de tu negocio
+        </div>
+        <div class="paso">
+            <strong>Paso 4:</strong> Haz clic en "Compartir" → "Descargar" → Formato PNG o JPG
+        </div>
+        <div class="paso">
+            <strong>Paso 5:</strong> Regresa a nuestra app y sube la imagen que descargaste
+        </div>
+        
+        <a href="https://www.canva.com/crear/tarjetas-de-presentacion" target="_blank" class="btn btn-canva">🎨 Abrir Canva (gratis)</a>
+    </div>
+
+    <!-- Opción 2: Diseño profesional -->
+    <div class="card">
+        <h2>✨ Opción 2: Diseño profesional (pago)</h2>
+        <p>¿No tienes tiempo o no sabes diseñar? Nosotros te hacemos tu tarjeta profesional.</p>
+        
+        <div class="precios">
+            <div class="plan">
+                <h3>📇 Diseño básico</h3>
+                <div class="precio">$5 USD</div>
+                <p>1 diseño<br>2 revisiones<br>Entrega en 24h</p>
+            </div>
+            <div class="plan">
+                <h3>🎨 Diseño premium</h3>
+                <div class="precio">$15 USD</div>
+                <p>3 diseños<br>Revisiones ilimitadas<br>Logotipo incluido<br>Entrega en 48h</p>
+            </div>
+            <div class="plan">
+                <h3>🏢 Pack empresa</h3>
+                <div class="precio">$40 USD</div>
+                <p>5 tarjetas (ejecutivos)<br>Diseños coordinados<br>Plantilla editable<br>Entrega en 72h</p>
+            </div>
+        </div>
+        
+        <p><strong>📝 Incluye:</strong> Tarjeta lista para imprimir + versión digital (PNG/JPG) para subir a nuestra app.</p>
+        
+        <a href="https://wa.me/573053294300?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20dise%C3%B1o%20de%20mi%20tarjeta%20de%20presentaci%C3%B3n" target="_blank" class="btn btn-whatsapp">📱 Solicitar diseño por WhatsApp</a>
+    </div>
+
+    <!-- Tutorial rápido en video -->
+    <div class="card">
+        <h2>📹 Tutorial rápido: Cómo hacer tu tarjeta en Canva</h2>
+        <p>Mira estos videos de 5 minutos para aprender a diseñar tu tarjeta paso a paso:</p>
+        
+        <div style="background: #e5e7eb; border-radius: 16px; padding: 30px; text-align: center; margin: 20px 0;">
+            <div style="font-size: 48px;">🎬</div>
+            <p><strong>Video tutorial:</strong> Aprende fácil con YouTube</p>
+            <a href="https://www.youtube.com/results?search_query=como+hacer+tarjeta+de+presentacion+en+canva" target="_blank" class="btn btn-primary">▶ Ver tutoriales en YouTube</a>
+        </div>
+        
+        <p><strong>Recomendaciones para tu diseño:</strong></p>
+        <ul>
+            <li>✅ Usa colores que representen tu negocio</li>
+            <li>✅ Incluye tu nombre, profesión, teléfono, email y WhatsApp</li>
+            <li>✅ Añade tu logo si tienes</li>
+            <li>✅ Guarda en tamaño cuadrado o vertical (recomendado: 1080x1080 o 800x1200 píxeles)</li>
+            <li>✅ Exporta en PNG para mejor calidad</li>
+        </ul>
+    </div>
+
+    <!-- Preguntas frecuentes -->
+    <div class="card">
+        <h2>❓ Preguntas frecuentes</h2>
+        
+        <div class="paso">
+            <strong>¿Necesito saber diseño?</strong><br>
+            No, Canva tiene plantillas donde solo cambias el texto y los colores.
+        </div>
+        <div class="paso">
+            <strong>¿Qué tamaño debe tener la imagen?</strong><br>
+            Recomendamos 1080x1080 píxeles (cuadrado) o 800x1200 (vertical). No más de 5 MB.
+        </div>
+        <div class="paso">
+            <strong>¿Puedo usar mi tarjeta física actual?</strong><br>
+            Sí, solo tómale una foto con buena luz o escanéala y súbela.
+        </div>
+        <div class="paso">
+            <strong>¿Cuánto cuesta subir la tarjeta a la app?</strong><br>
+            Es gratis hasta 20 usos. Luego pagas $10 por 1 año de usos ilimitados sin anuncios.
+        </div>
+    </div>
+
+    <a href="index.html" class="volver">← Volver a crear mi tarjeta</a>
+</div>
+</body>
+</html>
