@@ -66,7 +66,7 @@
         .toggle-auth { text-align: center; margin-top: 15px; color: #0070f3; cursor: pointer; font-size: 14px; font-weight: 600; }
         .mensaje-auth { margin-top: 15px; font-size: 14px; text-align: center; }
 
-        /* BOTÓN DE AYUDA FLOTANTE */
+        /* BOTÓN DE AYUDA FLOTANTE - CORREGIDO */
         .btn-ayuda {
             position: fixed !important;
             bottom: 30px !important;
@@ -84,6 +84,24 @@
             transition: all 0.3s;
         }
         .btn-ayuda:hover { transform: scale(1.05); }
+
+        /* Para pantallas grandes (PC) - mover el botón más abajo */
+        @media (min-width: 601px) {
+            .btn-ayuda {
+                bottom: 80px !important;
+                right: 40px !important;
+            }
+        }
+
+        /* Para pantallas pequeñas (celulares) */
+        @media (max-width: 600px) {
+            .btn-ayuda {
+                bottom: 15px !important;
+                right: 15px !important;
+                padding: 12px 18px;
+                font-size: 14px;
+            }
+        }
 
         .modal-ayuda {
             display: none;
@@ -226,7 +244,7 @@
     </div>
 
     <!-- ==========================================
-    BIENVENIDA (para usuarios nuevos)
+    BIENVENIDA
     ========================================== -->
     <div id="seccionBienvenida">
         <div style="background: linear-gradient(135deg, #0070f3, #005bb5); color: white; padding: 30px 20px; border-radius: 24px; margin-bottom: 20px;">
@@ -423,7 +441,9 @@
             <h2>📚 Guía de Uso</h2>
             <button class="btn-cerrar-ayuda" onclick="cerrarAyuda()">✕</button>
         </div>
+
         <div id="pasos">
+            <!-- INTRODUCCIÓN COMERCIAL -->
             <div class="paso active" data-paso="0">
                 <h3>🚀 ¡Bienvenido a la revolución digital!</h3>
                 <p>¡Olvídate de las tarjetas de papel que siempre se pierden y no se pueden actualizar! 🌐</p>
@@ -449,6 +469,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- PASO 1 -->
             <div class="paso" data-paso="1">
                 <h3>📝 Paso 1: Crear tu cuenta</h3>
                 <p>Regístrate con tu email y contraseña para comenzar.</p>
@@ -458,12 +480,14 @@
                     <li>✅ Acepta los términos y condiciones</li>
                 </ul>
             </div>
+
+            <!-- PASO 2 -->
             <div class="paso" data-paso="2">
                 <h3>🪪 Paso 2: Crear tu tarjeta</h3>
                 <p>Completa el formulario con tus datos:</p>
                 <ul>
                     <li>📌 <strong>Nombre completo</strong></li>
-                    <li>📝 <strong>Describa qué quiere publicar en la tarjeta</strong></li>
+                    <li>📝 <strong>Describa qué quiere publicar en la tarjeta</strong> (ej: Profesión, almacén, oficio, servicios)</li>
                     <li>📞 <strong>Teléfono o WhatsApp</strong></li>
                     <li>✉️ <strong>Correo electrónico</strong></li>
                     <li>🖼️ <strong>Examinar</strong> (logo o foto de perfil)</li>
@@ -473,10 +497,653 @@
                     <p style="margin: 0; font-size: 14px;">🎨 ¿Necesitas ayuda para diseñar tu tarjeta? <a href="diseno.html" target="_blank" style="color: #0070f3; font-weight: 600; text-decoration: none;">📐 Ver guía de diseño aquí</a></p>
                 </div>
             </div>
+
+            <!-- PASO 3 CORREGIDO -->
             <div class="paso" data-paso="3">
-                <h3>💰 Paso 3: Activación con Nequi (Bre-B)</h3>
-                <p>Para activar tu tarjeta, realiza el pago a través del sistema Bre-B:</p>
+                <h3>💰 Paso 3: Planes de pago</h3>
+                <p>Activa tu tarjeta con el plan que mejor se ajuste a tu negocio:</p>
                 <ul>
-                    <li>💵 <strong>$40,000 COP por un año</strong> o pagos bimestrales de <strong>$10,000</strong></li>
+                    <li>💵 <strong>Plan Básico:</strong> $40.000 COP al año (<strong>menos de $3.334 COP al mes</strong>).<br>Incluye: tarjeta digital, QR, puntos y hasta <strong>50 clientes registrados</strong>.</li>
+                    <li>📆 <strong>Pago bimestral:</strong> $10.000 COP cada 2 meses hasta completar el año ($40.000 COP al año).</li>
+                    <li>⭐ <strong>Plan Pro:</strong> $40.000 COP al mes.<br>Para negocios que superen los 50 clientes y quieran promociones ilimitadas.</li>
                     <li>📱 <strong>Llave Bre-B:</strong> <span style="font-weight: 700; color: #0070f3;">0092618602</span></li>
-                    <li>💳 <strong>PUL
+                    <li>💳 <strong>PULSA EL BOTÓN DE PAGO Y MANDAS EL COMPROBANTE DE PAGO.</strong></li>
+                    <li>⏳ <strong>Activación inmediata:</strong> Una vez confirmado el pago, tu tarjeta se activa al instante.</li>
+                </ul>
+            </div>
+
+            <!-- PASO 4 -->
+            <div class="paso" data-paso="4">
+                <h3>📤 Paso 4: Compartir tu tarjeta</h3>
+                <p>Una vez activa, comparte tu tarjeta:</p>
+                <ul>
+                    <li>📱 WhatsApp</li>
+                    <li>📷 Código QR</li>
+                    <li>🌐 Redes sociales</li>
+                    <li>📧 Firma de email</li>
+                </ul>
+            </div>
+
+            <!-- PASO 5 -->
+            <div class="paso" data-paso="5">
+                <h3>📷 Paso 5: Código QR</h3>
+                <p>Usa el código QR en tu local, tarjetas físicas o flyers.</p>
+                <p>💡 Escanea con la cámara de cualquier celular.</p>
+            </div>
+
+            <!-- PASO 6 CORREGIDO -->
+            <div class="paso" data-paso="6">
+                <h3>🔄 Paso 6: Usos Gratis y Crecimiento</h3>
+                <p>Cada tarjeta tiene <strong>5 usos gratis</strong> y <strong>navegación gratuita para promocionarse nacional e internacional</strong>.</p>
+                <ul>
+                    <li>🔢 Al llegar a <strong>5 usos</strong>, la tarjeta se bloquea automáticamente.</li>
+                    <li>💰 Para desbloquearla, activa el <strong>Plan Básico</strong> por $40.000 COP al año o paga <strong>$10.000 COP cada 2 meses</strong> hasta cubrir el año.</li>
+                    <li>📱 Usa la <strong>llave Bre-B: 0092618602</strong> para realizar el pago.</li>
+                    <li>✅ <strong>Activación inmediata:</strong> Al confirmar el pago, tu tarjeta se desbloquea al instante.</li>
+                    <li>🔥 <strong>Promoción especial:</strong> 10 días de acceso completo sin costo.</li>
+                    <li>📈 <strong>¿Tu negocio crece?</strong> Cuando superes los 50 clientes, activa el <strong>Plan Pro</strong> por $40.000 COP al mes y desbloquea promociones ilimitadas.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <div class="navegacion">
+            <button class="btn-paso btn-anterior" onclick="pasoAnterior()">◀ Anterior</button>
+            <span id="indicadorPaso" style="color:#999;">1 / 7</span>
+            <button class="btn-paso btn-siguiente" onclick="pasoSiguiente()" id="btnSiguiente">Siguiente ▶</button>
+        </div>
+
+        <!-- INDICADORES -->
+        <div class="indicadores" id="indicadores">
+            <span class="indicador active" onclick="irPaso(0)"></span>
+            <span class="indicador" onclick="irPaso(1)"></span>
+            <span class="indicador" onclick="irPaso(2)"></span>
+            <span class="indicador" onclick="irPaso(3)"></span>
+            <span class="indicador" onclick="irPaso(4)"></span>
+            <span class="indicador" onclick="irPaso(5)"></span>
+            <span class="indicador" onclick="irPaso(6)"></span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+// ============================================
+// CONFIGURACIÓN SUPABASE
+// ============================================
+const SUPABASE_URL = 'https://tabfvwqhvvqtjjsplehx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_zFqNv-oumnQ7GpHgLKfcYg_SdDlXE3p';
+
+// ============================================
+// SISTEMA DE AYUDA
+// ============================================
+let pasoActual = 0;
+const totalPasos = 7;
+
+function abrirAyuda() {
+    document.getElementById('modalAyuda').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    pasoActual = 0;
+    actualizarPaso();
+}
+
+function cerrarAyuda() {
+    document.getElementById('modalAyuda').classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+function pasoSiguiente() {
+    if (pasoActual < totalPasos - 1) {
+        pasoActual++;
+        actualizarPaso();
+    } else {
+        cerrarAyuda();
+    }
+}
+
+function pasoAnterior() {
+    if (pasoActual > 0) {
+        pasoActual--;
+        actualizarPaso();
+    }
+}
+
+function irPaso(index) {
+    pasoActual = index;
+    actualizarPaso();
+}
+
+function actualizarPaso() {
+    document.querySelectorAll('.paso').forEach(el => el.classList.remove('active'));
+    const pasoEl = document.querySelector(`.paso[data-paso="${pasoActual}"]`);
+    if (pasoEl) pasoEl.classList.add('active');
+    document.getElementById('indicadorPaso').textContent = `${pasoActual + 1} / ${totalPasos}`;
+    document.querySelectorAll('.indicador').forEach((el, index) => {
+        el.classList.toggle('active', index === pasoActual);
+    });
+    const btnSiguiente = document.getElementById('btnSiguiente');
+    if (pasoActual === totalPasos - 1) {
+        btnSiguiente.textContent = '✅ Finalizar';
+        btnSiguiente.className = 'btn-paso btn-final';
+    } else {
+        btnSiguiente.textContent = 'Siguiente ▶';
+        btnSiguiente.className = 'btn-paso btn-siguiente';
+    }
+}
+
+// ============================================
+// COMPARTIR Y QR
+// ============================================
+let ultimaUrl = '';
+let ultimoQrCanvas = null;
+
+function compartirWhatsApp() {
+    window.open(`https://wa.me/?text=📇%20Mi%20tarjeta%20de%20presentación%20digital:%20${encodeURIComponent(ultimaUrl)}`, '_blank');
+}
+
+function compartirFacebook() {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ultimaUrl)}`, '_blank');
+}
+
+function compartirTwitter() {
+    window.open(`https://twitter.com/intent/tweet?text=📇%20Mi%20tarjeta%20de%20presentación%20digital&url=${encodeURIComponent(ultimaUrl)}`, '_blank');
+}
+
+function copiarEnlace() {
+    navigator.clipboard.writeText(ultimaUrl).then(() => {
+        alert('✅ Enlace copiado al portapapeles');
+    }).catch(() => {
+        prompt('Copia este enlace:', ultimaUrl);
+    });
+}
+
+function descargarQR() {
+    if (ultimoQrCanvas) {
+        const link = document.createElement('a');
+        link.download = `qr-tarjeta.png`;
+        link.href = ultimoQrCanvas.toDataURL();
+        link.click();
+    } else {
+        alert('Error: No se pudo generar la imagen QR');
+    }
+}
+
+function cerrarSeccionQR() {
+    document.getElementById('seccionQR').classList.add('hidden');
+    localStorage.removeItem('ultimaTarjeta');
+}
+
+function mostrarQR(url) {
+    ultimaUrl = url;
+    document.getElementById('seccionQR').classList.remove('hidden');
+    document.getElementById('enlacePublico').textContent = url;
+
+    const qrDiv = document.getElementById('qrCodeDiv');
+    qrDiv.innerHTML = '';
+
+    const qr = new QRCode(qrDiv, {
+        text: url,
+        width: 150,
+        height: 150
+    });
+
+    setTimeout(() => {
+        const canvas = qrDiv.querySelector('canvas');
+        if (canvas) {
+            ultimoQrCanvas = canvas;
+        }
+    }, 100);
+
+    localStorage.setItem('ultimaTarjeta', JSON.stringify({ url: url }));
+}
+
+function recuperarUltimaTarjeta() {
+    const guardada = localStorage.getItem('ultimaTarjeta');
+    if (guardada) {
+        try {
+            const data = JSON.parse(guardada);
+            if (data.url) {
+                mostrarQR(data.url);
+            }
+        } catch (e) {}
+    }
+}
+
+// ============================================
+// CONTADOR DE DÍAS PROMOCIONALES (10 DÍAS)
+// ============================================
+function actualizarContador() {
+    const fechaInicio = new Date('2026-06-18');
+    const fechaFin = new Date(fechaInicio);
+    fechaFin.setDate(fechaFin.getDate() + 10);
+
+    const hoy = new Date();
+    const diffTime = fechaFin - hoy;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    const diasRestantes = Math.max(0, diffDays);
+    const elemento = document.getElementById('diasRestantes');
+    if (elemento) {
+        elemento.textContent = diasRestantes;
+    }
+
+    if (diasRestantes === 0) {
+        const promocionDiv = document.querySelector('.promocion-banner');
+        if (promocionDiv) {
+            promocionDiv.innerHTML = '⏳ Promoción finalizada';
+            promocionDiv.style.background = '#f3f4f6';
+            promocionDiv.style.color = '#6b7280';
+        }
+    }
+}
+
+// ============================================
+// LLAVE BRE-B
+// ============================================
+function mostrarLlaveBreB() {
+    document.getElementById('modalLlave').style.display = 'flex';
+}
+
+function cerrarModalLlave() {
+    document.getElementById('modalLlave').style.display = 'none';
+}
+
+function copiarLlave() {
+    const llave = '0092618602';
+    navigator.clipboard.writeText(llave).then(() => {
+        alert('✅ Llave copiada al portapapeles: ' + llave);
+    }).catch(() => {
+        prompt('Copia esta llave:', llave);
+    });
+}
+
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('modalLlave');
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// ============================================
+// GUARDAR TARJETA EN CARPETA
+// ============================================
+function guardarTarjetaEnCarpeta() {
+    const nombre = document.getElementById('titulo')?.value || 'mi-tarjeta';
+    const preview = document.getElementById('preview');
+    
+    if (!preview || !preview.src || preview.src === '') {
+        alert('❌ Primero crea tu tarjeta y asegúrate de que la imagen esté cargada.');
+        return;
+    }
+    
+    const nombreLimpio = nombre
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '') || 'tarjeta';
+    
+    const nombreArchivo = `tarjeta-${nombreLimpio}.png`;
+    
+    const mensajeOriginal = document.getElementById('mensaje')?.innerText || '';
+    const mensajeElement = document.getElementById('mensaje');
+    if (mensajeElement) {
+        mensajeElement.innerText = '⏳ Guardando tarjeta...';
+        mensajeElement.style.color = 'orange';
+    }
+    
+    fetch(preview.src)
+        .then(response => response.blob())
+        .then(blob => {
+            const url = URL.createObjectURL(blob);
+            const enlace = document.createElement('a');
+            enlace.href = url;
+            enlace.download = nombreArchivo;
+            document.body.appendChild(enlace);
+            enlace.click();
+            document.body.removeChild(enlace);
+            URL.revokeObjectURL(url);
+            
+            if (mensajeElement) {
+                mensajeElement.innerText = '✅ Tarjeta guardada con éxito';
+                mensajeElement.style.color = 'green';
+                setTimeout(() => {
+                    mensajeElement.innerText = mensajeOriginal;
+                    mensajeElement.style.color = '';
+                }, 4000);
+            }
+            
+            alert(`✅ ¡Tarjeta guardada con éxito!\n\n📁 Carpeta: "MIS TARJETAS DE PRESENTACION"\n📄 Archivo: "${nombreArchivo}"\n\n💡 Busca esta carpeta en tu galería o gestor de archivos.`);
+        })
+        .catch(error => {
+            console.error('Error al descargar:', error);
+            if (mensajeElement) {
+                mensajeElement.innerText = '❌ Error al guardar';
+                mensajeElement.style.color = 'red';
+                setTimeout(() => {
+                    mensajeElement.innerText = mensajeOriginal;
+                    mensajeElement.style.color = '';
+                }, 4000);
+            }
+            alert('❌ Hubo un error al descargar la imagen. Intenta de nuevo.');
+        });
+}
+
+// ============================================
+// ABRIR MODAL DE LOGIN DESDE BIENVENIDA
+// ============================================
+function abrirModalLogin() {
+    document.getElementById('modalAuth').style.display = 'flex';
+}
+
+// ============================================
+// FORMULARIO DE TARJETA
+// ============================================
+const form = document.getElementById('form-tarjeta');
+const messageText = document.getElementById('mensaje');
+const inputImagen = document.getElementById('imagen');
+const preview = document.getElementById('preview');
+
+inputImagen.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    }
+});
+
+form.onsubmit = async function(e) {
+    e.preventDefault();
+    const boton = form.querySelector('button');
+    boton.disabled = true;
+
+    document.getElementById('mensajeValidacion').style.display = 'block';
+    messageText.style.color = "orange";
+    messageText.innerText = "⏳ Validando imagen... esto puede tomar unos minutos";
+
+    try {
+        const archivo = inputImagen.files[0];
+        if (!archivo) throw new Error("Selecciona una imagen");
+
+        const nombreArchivo = `${Date.now()}_${archivo.name}`;
+
+        const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/tarjetas/${nombreArchivo}`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            },
+            body: archivo
+        });
+
+        if (!uploadRes.ok) {
+            const error = await uploadRes.text();
+            throw new Error(`Error subiendo imagen: ${error}`);
+        }
+
+        const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/tarjetas/${nombreArchivo}`;
+
+        const urlAmigable = document.getElementById('titulo').value
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '') + '-' + Date.now().toString(36);
+
+        const datos = {
+            titulo: document.getElementById('titulo').value,
+            subtitulo: document.getElementById('subtitulo').value,
+            telefono: document.getElementById('telefono').value,
+            email: document.getElementById('email_tarjeta').value,
+            image_url: imageUrl,
+            url_unique: urlAmigable,
+            usos: 0,
+            bloqueada: false
+        };
+
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/perfiles`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        });
+
+        document.getElementById('mensajeValidacion').style.display = 'none';
+
+        if (response.ok) {
+            messageText.style.color = "green";
+            messageText.innerText = "🎉 ¡Tarjeta guardada con éxito!";
+
+            const enlaceCompleto = window.location.origin + window.location.pathname.replace('index.html', '') + `ver-tarjeta.html?url=${urlAmigable}`;
+
+            mostrarQR(enlaceCompleto);
+
+            form.reset();
+            preview.style.display = 'none';
+
+        } else {
+            const error = await response.json();
+            throw new Error(error.message || "Error al guardar");
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('mensajeValidacion').style.display = 'none';
+        messageText.style.color = "red";
+        messageText.innerText = `❌ ${error.message}`;
+    } finally {
+        boton.disabled = false;
+    }
+};
+
+// ============================================
+// AUTENTICACIÓN
+// ============================================
+const modal = document.getElementById('modalAuth');
+const abrirModal = document.getElementById('abrirModalBtn');
+const cerrarModal = document.getElementById('cerrarModal');
+const modalTitulo = document.getElementById('modalTitulo');
+const modalAccionBtn = document.getElementById('modalAccionBtn');
+const modalEmail = document.getElementById('modalEmail');
+const modalPassword = document.getElementById('modalPassword');
+const modalMensaje = document.getElementById('modalMensaje');
+const toggleAuthLink = document.getElementById('toggleAuthLink');
+
+const seccionLogin = document.getElementById('seccionLogin');
+const seccionDashboard = document.getElementById('seccionDashboard');
+
+let esModoLogin = true;
+
+function mostrarSeccion(seccion) {
+    if (seccion === 'login') {
+        seccionLogin.classList.remove('hidden');
+        seccionDashboard.classList.add('hidden');
+    } else {
+        seccionLogin.classList.add('hidden');
+        seccionDashboard.classList.remove('hidden');
+    }
+}
+
+abrirModal.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    modalEmail.value = '';
+    modalPassword.value = '';
+    modalMensaje.innerHTML = '';
+    esModoLogin = true;
+    actualizarModalUI();
+});
+
+cerrarModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+toggleAuthLink.addEventListener('click', () => {
+    esModoLogin = !esModoLogin;
+    actualizarModalUI();
+    modalMensaje.innerHTML = '';
+    modalPassword.value = '';
+});
+
+function actualizarModalUI() {
+    if (esModoLogin) {
+        modalTitulo.innerText = 'Iniciar Sesión';
+        modalAccionBtn.innerText = 'Iniciar Sesión';
+        toggleAuthLink.innerText = '¿No tiene cuenta? Regístrese';
+        modalAccionBtn.className = 'btn-auth btn-login';
+    } else {
+        modalTitulo.innerText = 'Crear Cuenta';
+        modalAccionBtn.innerText = 'Registrarse';
+        toggleAuthLink.innerText = '¿Ya tiene cuenta? Inicie Sesión';
+        modalAccionBtn.className = 'btn-auth btn-registro';
+    }
+}
+
+function mostrarMensajeModal(texto, esError = true) {
+    modalMensaje.innerHTML = texto;
+    modalMensaje.style.color = esError ? '#ef4444' : '#10b981';
+    setTimeout(() => {
+        if (modalMensaje.innerHTML === texto) {
+            modalMensaje.innerHTML = '';
+        }
+    }, 3000);
+}
+
+async function registrarUsuario(email, password) {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+    return response.json();
+}
+
+async function iniciarSesion(email, password) {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+    return response.json();
+}
+
+function guardarSesion(session) {
+    localStorage.setItem('mi_sesion', JSON.stringify(session));
+}
+
+function obtenerSesion() {
+    const guardada = localStorage.getItem('mi_sesion');
+    return guardada ? JSON.parse(guardada) : null;
+}
+
+function eliminarSesion() {
+    localStorage.removeItem('mi_sesion');
+}
+
+function actualizarBarraUsuario() {
+    const sesion = obtenerSesion();
+    const userSpan = document.getElementById('userStatusDisplay');
+    const abrirBtn = document.getElementById('abrirModalBtn');
+    const cerrarBtn = document.getElementById('cerrarSesionBtn');
+    const barraUsuario = document.getElementById('barraUsuario');
+    const bienvenida = document.getElementById('seccionBienvenida');
+
+    if (sesion && sesion.user) {
+        userSpan.innerHTML = `✅ Conectado como: ${sesion.user.email}`;
+        abrirBtn.style.display = 'none';
+        cerrarBtn.style.display = 'inline-block';
+        barraUsuario.style.display = 'flex';
+        bienvenida.style.display = 'none';
+        mostrarSeccion('dashboard');
+        recuperarUltimaTarjeta();
+        actualizarContador();
+    } else {
+        userSpan.innerHTML = '👤 No ha iniciado sesión';
+        abrirBtn.style.display = 'inline-block';
+        cerrarBtn.style.display = 'none';
+        barraUsuario.style.display = 'flex';
+        bienvenida.style.display = 'block';
+        mostrarSeccion('login');
+    }
+}
+
+modalAccionBtn.addEventListener('click', async () => {
+    const email = modalEmail.value.trim();
+    const password = modalPassword.value;
+
+    if (!email || !password) {
+        mostrarMensajeModal('Complete correo y contraseña');
+        return;
+    }
+
+    if (!esModoLogin && password.length < 6) {
+        mostrarMensajeModal('La contraseña debe tener al menos 6 caracteres');
+        return;
+    }
+
+    if (!esModoLogin) {
+        const consentimiento = document.getElementById('consentimiento');
+        if (!consentimiento || !consentimiento.checked) {
+            mostrarMensajeModal('Debes aceptar los Términos y Condiciones para registrarte');
+            modalAccionBtn.disabled = false;
+            modalAccionBtn.innerText = 'Registrarse';
+            return;
+        }
+    }
+
+    modalAccionBtn.disabled = true;
+    modalAccionBtn.innerText = esModoLogin ? 'Ingresando...' : 'Registrando...';
+
+    try {
+        let resultado;
+        if (esModoLogin) {
+            resultado = await iniciarSesion(email, password);
+        } else {
+            resultado = await registrarUsuario(email, password);
+        }
+
+        if (resultado.access_token) {
+            guardarSesion(resultado);
+            actualizarBarraUsuario();
+            modal.style.display = 'none';
+            mostrarMensajeModal('✅ Sesión iniciada correctamente', false);
+            setTimeout(() => location.reload(), 1000);
+        } else if (resultado.user && !resultado.access_token) {
+            mostrarMensajeModal('✅ Cuenta creada. Revise su correo para confirmar.', false);
+            setTimeout(() => { modal.style.display = 'none'; }, 2000);
+        } else {
+            const mensajeError = resultado.error_description || resultado.msg || 'Error desconocido';
+            mostrarMensajeModal(`❌ ${mensajeError}`);
+        }
+    } catch (error) {
+        mostrarMensajeModal(`❌ Error de conexión: ${error.message}`);
+    } finally {
+        modalAccionBtn.disabled = false;
+        modalAccionBtn.innerText = esModoLogin ? 'Iniciar Sesión' : 'Registrarse';
+    }
+});
+
+document.getElementById('cerrarSesionBtn').addEventListener('click', () => {
+    eliminarSesion();
+    actualizarBarraUsuario();
+    location.reload();
+});
+
+// ============================================
+// INICIALIZAR
+// ============================================
+actualizarBarraUsuario();
+</script>
+</body>
+</html>
