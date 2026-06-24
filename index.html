@@ -66,18 +66,18 @@
         .toggle-auth { text-align: center; margin-top: 15px; color: #0070f3; cursor: pointer; font-size: 14px; font-weight: 600; }
         .mensaje-auth { margin-top: 15px; font-size: 14px; text-align: center; }
 
-        /* BOTÓN DE AYUDA FLOTANTE - CORREGIDO */
+        /* BOTÓN DE AYUDA FLOTANTE - REPOSICIONADO */
         .btn-ayuda {
             position: fixed !important;
-            bottom: 30px !important;
-            right: 30px !important;
+            bottom: 20px !important;
+            right: 20px !important;
             z-index: 9999 !important;
             background: linear-gradient(135deg, #667eea, #764ba2) !important;
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 15px 25px;
-            font-size: 16px;
+            padding: 12px 20px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 8px 25px rgba(102,126,234,0.5);
@@ -85,21 +85,12 @@
         }
         .btn-ayuda:hover { transform: scale(1.05); }
 
-        /* Para pantallas grandes (PC) - mover el botón más abajo */
-        @media (min-width: 601px) {
-            .btn-ayuda {
-                bottom: 80px !important;
-                right: 40px !important;
-            }
-        }
-
-        /* Para pantallas pequeñas (celulares) */
         @media (max-width: 600px) {
             .btn-ayuda {
                 bottom: 15px !important;
-                right: 15px !important;
-                padding: 12px 18px;
-                font-size: 14px;
+                right: 10px !important;
+                padding: 10px 15px;
+                font-size: 12px;
             }
         }
 
@@ -318,11 +309,13 @@
     </div>
 
     <!-- ==========================================
-    SECCIÓN LOGIN
+    SECCIÓN LOGIN (CLICKEABLE)
     ========================================== -->
     <div id="seccionLogin" class="hidden">
         <h2>📇 Crear Tarjeta de Presentación</h2>
-        <p style="color: #666; font-size: 14px;">Inicia sesión o regístrate para crear tu tarjeta digital.</p>
+        <p style="color: #666; font-size: 14px; cursor: pointer;" onclick="abrirModalLogin()">
+            🔐 <strong style="color: #0070f3;">Inicia sesión</strong> o <strong style="color: #0070f3;">regístrate</strong> para crear tu tarjeta digital.
+        </p>
     </div>
 
     <!-- ==========================================
@@ -443,7 +436,7 @@
         </div>
 
         <div id="pasos">
-            <!-- INTRODUCCIÓN COMERCIAL -->
+            <!-- INTRODUCCIÓN -->
             <div class="paso active" data-paso="0">
                 <h3>🚀 ¡Bienvenido a la revolución digital!</h3>
                 <p>¡Olvídate de las tarjetas de papel que siempre se pierden y no se pueden actualizar! 🌐</p>
@@ -498,7 +491,7 @@
                 </div>
             </div>
 
-            <!-- PASO 3 CORREGIDO -->
+            <!-- PASO 3 -->
             <div class="paso" data-paso="3">
                 <h3>💰 Paso 3: Planes de pago</h3>
                 <p>Activa tu tarjeta con el plan que mejor se ajuste a tu negocio:</p>
@@ -531,7 +524,7 @@
                 <p>💡 Escanea con la cámara de cualquier celular.</p>
             </div>
 
-            <!-- PASO 6 CORREGIDO -->
+            <!-- PASO 6 -->
             <div class="paso" data-paso="6">
                 <h3>🔄 Paso 6: Usos Gratis y Crecimiento</h3>
                 <p>Cada tarjeta tiene <strong>5 usos gratis</strong> y <strong>navegación gratuita para promocionarse nacional e internacional</strong>.</p>
@@ -546,14 +539,12 @@
             </div>
         </div>
 
-        <!-- NAVEGACIÓN -->
         <div class="navegacion">
             <button class="btn-paso btn-anterior" onclick="pasoAnterior()">◀ Anterior</button>
             <span id="indicadorPaso" style="color:#999;">1 / 7</span>
             <button class="btn-paso btn-siguiente" onclick="pasoSiguiente()" id="btnSiguiente">Siguiente ▶</button>
         </div>
 
-        <!-- INDICADORES -->
         <div class="indicadores" id="indicadores">
             <span class="indicador active" onclick="irPaso(0)"></span>
             <span class="indicador" onclick="irPaso(1)"></span>
