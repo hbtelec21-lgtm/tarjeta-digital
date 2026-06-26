@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -18,7 +18,6 @@
         .preview { margin-top: 10px; max-width: 100%; border-radius: 12px; display: none; }
         .hidden { display: none; }
 
-        /* QR Y COMPARTIR */
         .qr-container { margin-top: 20px; padding: 20px; background: #f9fafb; border-radius: 16px; text-align: center; }
         .qr-container img { width: 150px; height: 150px; margin: 10px auto; }
         .btn-compartir { display: inline-block; margin: 5px; padding: 10px 18px; border: none; border-radius: 30px; cursor: pointer; font-size: 14px; font-weight: 600; color: white; text-decoration: none; transition: all 0.3s; }
@@ -30,7 +29,6 @@
         .btn-descargar { background: #6b7280; }
         .btn-cerrar-qr { background: #dc3545; }
 
-        /* MODALES */
         .modal {
             display: none;
             position: fixed;
@@ -66,7 +64,6 @@
         .toggle-auth { text-align: center; margin-top: 15px; color: #0070f3; cursor: pointer; font-size: 14px; font-weight: 600; }
         .mensaje-auth { margin-top: 15px; font-size: 14px; text-align: center; }
 
-        /* BOTÓN DE AYUDA FLOTANTE - REPOSICIONADO */
         .btn-ayuda {
             position: fixed !important;
             bottom: 20px !important;
@@ -84,14 +81,8 @@
             transition: all 0.3s;
         }
         .btn-ayuda:hover { transform: scale(1.05); }
-
         @media (max-width: 600px) {
-            .btn-ayuda {
-                bottom: 15px !important;
-                right: 10px !important;
-                padding: 10px 15px;
-                font-size: 12px;
-            }
+            .btn-ayuda { bottom: 15px !important; right: 10px !important; padding: 10px 15px; font-size: 12px; }
         }
 
         .modal-ayuda {
@@ -107,7 +98,6 @@
             align-items: center;
         }
         .modal-ayuda.active { display: flex; }
-
         .modal-contenido-ayuda {
             background: white;
             border-radius: 24px;
@@ -123,7 +113,6 @@
             from { transform: translateY(50px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -133,7 +122,6 @@
             margin-bottom: 15px;
         }
         .modal-header h2 { margin: 0; color: #333; }
-
         .btn-cerrar-ayuda {
             background: none;
             border: none;
@@ -143,7 +131,6 @@
             transition: color 0.3s;
         }
         .btn-cerrar-ayuda:hover { color: #333; }
-
         .paso {
             display: none;
             padding: 15px 0;
@@ -152,7 +139,6 @@
         .paso h3 { color: #333; margin-bottom: 10px; }
         .paso p { color: #666; line-height: 1.6; }
         .paso ul { color: #666; padding-left: 20px; }
-
         .navegacion {
             display: flex;
             justify-content: space-between;
@@ -175,7 +161,6 @@
         .btn-siguiente:hover { transform: scale(1.02); }
         .btn-final { background: #22c55e; color: white; }
         .btn-final:hover { background: #16a34a; }
-
         .indicadores {
             display: flex;
             gap: 8px;
@@ -190,15 +175,9 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .indicador.active {
-            background: #667eea;
-            transform: scale(1.2);
-        }
+        .indicador.active { background: #667eea; transform: scale(1.2); }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
+        @keyframes spin { to { transform: rotate(360deg); } }
         .btn-diseno {
             display: inline-block;
             background: #667eea;
@@ -210,11 +189,7 @@
             transition: all 0.3s;
             margin-top: 10px;
         }
-        .btn-diseno:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
-        }
-
+        .btn-diseno:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(102,126,234,0.4); }
         @media (max-width: 500px) {
             .container { padding: 20px; }
             .btn-ayuda { padding: 12px 18px; font-size: 14px; bottom: 15px; right: 15px; }
@@ -225,24 +200,19 @@
 <body>
 
 <div class="container" id="appContainer">
-    <!-- ==========================================
-    BARRA DE USUARIO
-    ========================================== -->
+    <!-- BARRA DE USUARIO -->
     <div id="barraUsuario" style="background: #f0fdf4; padding: 10px 15px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <span id="userStatusDisplay">👤 No ha iniciado sesión</span>
         <button id="abrirModalBtn" style="background: #0070f3; color: white; padding: 8px 20px; border-radius: 30px; border: none; cursor: pointer; font-weight: 600;">🔐 Iniciar Sesión</button>
         <button id="cerrarSesionBtn" style="background: #ef4444; color: white; padding: 8px 20px; border-radius: 30px; border: none; cursor: pointer; display: none; font-weight: 600;">🚪 Cerrar Sesión</button>
     </div>
 
-    <!-- ==========================================
-    BIENVENIDA
-    ========================================== -->
+    <!-- BIENVENIDA -->
     <div id="seccionBienvenida">
         <div style="background: linear-gradient(135deg, #0070f3, #005bb5); color: white; padding: 30px 20px; border-radius: 24px; margin-bottom: 20px;">
             <h1 style="font-size: 24px; margin: 0;">📇 Tu tarjeta de presentación ahora es digital</h1>
             <p style="font-size: 16px; opacity: 0.9; margin: 10px 0 0 0;">Crea, comparte y promociona tu negocio, empresa, profesión o servicios sin necesidad de papel.</p>
         </div>
-
         <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
             <div style="background: #f0f7ff; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; text-align: left;">
                 <span style="font-size: 24px;">🖼️</span>
@@ -261,8 +231,6 @@
                 <div><strong>Comparte con QR, enlace o redes</strong><br><span style="font-size: 13px; color: #666;">También imprime el QR y ponlo en tu negocio.</span></div>
             </div>
         </div>
-
-        <!-- PLAN BÁSICO -->
         <div style="background: #dbeafe; padding: 15px; border-radius: 12px; border: 2px solid #0070f3; margin-bottom: 20px;">
             <p style="font-weight: 700; color: #1e3a8a; margin: 0; font-size: 16px;">💰 PLAN BÁSICO: $40.000 COP al año</p>
             <p style="color: #1e3a8a; margin: 5px 0 0 0; font-size: 14px;">
@@ -270,8 +238,6 @@
                 Incluye: tarjeta digital, QR, puntos y hasta <strong>50 clientes registrados</strong>.
             </p>
         </div>
-
-        <!-- PROMOCIÓN -->
         <div style="background: #fef3c7; padding: 15px; border-radius: 12px; border: 2px solid #f59e0b; margin-bottom: 20px;">
             <p style="font-weight: 700; color: #92400e; margin: 0; font-size: 16px;">🔥 ¡PROMOCIÓN DE LANZAMIENTO!</p>
             <p style="color: #92400e; margin: 5px 0 0 0; font-size: 14px;">
@@ -279,8 +245,6 @@
                 <strong>5 usos de prueba</strong> antes de activarla.
             </p>
         </div>
-
-        <!-- PLAN PRO -->
         <div style="background: #f3e8ff; padding: 12px 15px; border-radius: 12px; border: 1px solid #a855f7; margin-bottom: 20px;">
             <p style="margin: 0; font-size: 14px; color: #6b21a8;">
                 ⭐ <strong>¿Tu negocio crece?</strong><br>
@@ -290,27 +254,18 @@
                 </span>
             </p>
         </div>
-
-        <!-- AYUDA -->
         <div style="background: #f0f7ff; padding: 10px 15px; border-radius: 12px; margin-bottom: 20px; text-align: center; border-left: 4px solid #0070f3;">
-            <p style="margin: 0; font-size: 14px; color: #666;">
-                📖 Para más información, <a href="#" onclick="abrirAyuda()" style="color: #0070f3; text-decoration: none; font-weight: 600;">lee la ayuda</a>.
-            </p>
+            <p style="margin: 0; font-size: 14px; color: #666;">📖 Para más información, <a href="#" onclick="abrirAyuda()" style="color: #0070f3; text-decoration: none; font-weight: 600;">lee la ayuda</a>.</p>
         </div>
-
-        <!-- CTA -->
         <button onclick="abrirModalLogin()" style="background: linear-gradient(135deg, #0070f3, #005bb5); color: white; border: none; padding: 14px; border-radius: 30px; font-size: 18px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.3s;">
             🚀 Comenzar ahora
         </button>
-
         <p style="margin-top: 15px; font-size: 12px; color: #999;">
             ¿Ya tienes cuenta? <a href="#" onclick="abrirModalLogin()" style="color: #0070f3; text-decoration: none; font-weight: 600;">Inicia sesión aquí</a>
         </p>
     </div>
 
-    <!-- ==========================================
-    SECCIÓN LOGIN (CLICKEABLE)
-    ========================================== -->
+    <!-- SECCIÓN LOGIN -->
     <div id="seccionLogin" class="hidden">
         <h2>📇 Crear Tarjeta de Presentación</h2>
         <p style="color: #666; font-size: 14px; cursor: pointer;" onclick="abrirModalLogin()">
@@ -318,17 +273,13 @@
         </p>
     </div>
 
-    <!-- ==========================================
-    SECCIÓN DASHBOARD
-    ========================================== -->
+    <!-- SECCIÓN DASHBOARD -->
     <div id="seccionDashboard" class="hidden">
         <h2>📇 Crear Tarjeta de Presentación</h2>
-
         <div class="promocion-banner" style="background: #fef3c7; padding: 10px 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #f59e0b; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
             <span style="color: #92400e; font-weight: 600;">⏳ Promoción de lanzamiento</span>
             <span style="color: #92400e; font-weight: 600;">🔥 <span id="diasRestantes">10</span> días restantes</span>
         </div>
-
         <form id="form-tarjeta">
             <input type="text" id="titulo" placeholder="Nombre completo" required>
             <textarea id="subtitulo" placeholder="Describa qué quiere publicar en la tarjeta de presentación." rows="3" required></textarea>
@@ -342,22 +293,16 @@
             <img id="preview" class="preview" alt="Vista previa">
             <button type="submit">💾 Guardar Tarjeta en la Nube</button>
         </form>
-
         <a href="diseno.html" target="_blank" class="btn-diseno">🎨 ¿Cómo diseñar mi tarjeta?</a>
-
         <button id="btnMostrarLlave" style="background: #6b7280; margin-top: 10px; border-radius: 30px;" onclick="mostrarLlaveBreB()">
             🔑 Mostrar llave Bre-B para transferencias
         </button>
-
         <p id="mensaje"></p>
     </div>
 
-    <!-- ==========================================
-    SECCIÓN QR Y COMPARTIR
-    ========================================== -->
+    <!-- SECCIÓN QR Y COMPARTIR (CON KIT) -->
     <div id="seccionQR" class="hidden qr-container">
         <h3>🎉 ¡Tarjeta creada con éxito!</h3>
-
         <div id="mensajeValidacion" style="display: none; background: #fef3c7; padding: 15px; border-radius: 12px; margin: 10px 0; border: 1px solid #f59e0b;">
             <p style="color: #92400e; font-weight: 600; margin: 0;">⏳ Revisión de imagen en proceso</p>
             <p style="color: #92400e; margin: 5px 0 0 0;">Esto puede tomar unos minutos mientras verificamos el contenido de tu imagen.</p>
@@ -366,18 +311,15 @@
                 <span style="color: #92400e; font-size: 14px;">Validando... por favor espera</span>
             </div>
         </div>
-
         <div id="infoPagoBreB" style="background: #f0fdf4; padding: 15px; border-radius: 12px; margin: 10px 0; border: 1px solid #22c55e;">
             <p style="color: #166534; font-weight: 600; margin: 0;">💰 Activa tu tarjeta ahora</p>
             <p style="color: #166534; margin: 5px 0 0 0;">Paga <strong>$40,000 COP por un año</strong> o pagos bimestrales de <strong>$10,000</strong>.</p>
             <p style="color: #166534; margin: 5px 0 0 0;">📱 Llave Bre-B: <strong style="color: #0070f3;">0092618602</strong></p>
             <p style="color: #166534; margin: 5px 0 0 0;">✅ Activación inmediata al confirmar el pago.</p>
         </div>
-
         <div id="qrCodeDiv" style="display: inline-block; margin: 10px auto;"></div>
         <p><strong>🔗 Enlace público:</strong></p>
         <p id="enlacePublico" style="word-break: break-all; font-size: 12px; background: #f3f4f6; padding: 8px; border-radius: 8px;"></p>
-
         <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 15px;">
             <button class="btn-compartir btn-whatsapp" onclick="compartirWhatsApp()">📱 WhatsApp</button>
             <button class="btn-compartir btn-facebook" onclick="compartirFacebook()">📘 Facebook</button>
@@ -386,9 +328,10 @@
             <button class="btn-compartir btn-descargar" onclick="descargarQR()">📥 Descargar QR</button>
             <button class="btn-compartir btn-cerrar-qr" onclick="cerrarSeccionQR()">✖ Cerrar</button>
         </div>
-
-        <button onclick="guardarTarjetaEnCarpeta()" style="background: #8b5cf6; margin-top: 10px; border-radius: 30px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            💾 Guardar tarjeta en "MIS TARJETAS DE PRESENTACION"
+        
+        <!-- KIT DE TARJETA (DESDE PRUEBA-KIT) -->
+        <button onclick="guardarKitTarjeta()" style="background: #8b5cf6; margin-top: 10px; border-radius: 30px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            📦 Descargar KIT de tarjeta (imagen + QR + URL)
         </button>
     </div>
 </div>
@@ -434,9 +377,7 @@
             <h2>📚 Guía de Uso</h2>
             <button class="btn-cerrar-ayuda" onclick="cerrarAyuda()">✕</button>
         </div>
-
         <div id="pasos">
-            <!-- INTRODUCCIÓN -->
             <div class="paso active" data-paso="0">
                 <h3>🚀 ¡Bienvenido a la revolución digital!</h3>
                 <p>¡Olvídate de las tarjetas de papel que siempre se pierden y no se pueden actualizar! 🌐</p>
@@ -462,19 +403,11 @@
                     </div>
                 </div>
             </div>
-
-            <!-- PASO 1 -->
             <div class="paso" data-paso="1">
                 <h3>📝 Paso 1: Crear tu cuenta</h3>
                 <p>Regístrate con tu email y contraseña para comenzar.</p>
-                <ul>
-                    <li>✅ Usa un email válido</li>
-                    <li>✅ Contraseña de al menos 6 caracteres</li>
-                    <li>✅ Acepta los términos y condiciones</li>
-                </ul>
+                <ul><li>✅ Usa un email válido</li><li>✅ Contraseña de al menos 6 caracteres</li><li>✅ Acepta los términos y condiciones</li></ul>
             </div>
-
-            <!-- PASO 2 -->
             <div class="paso" data-paso="2">
                 <h3>🪪 Paso 2: Crear tu tarjeta</h3>
                 <p>Completa el formulario con tus datos:</p>
@@ -490,8 +423,6 @@
                     <p style="margin: 0; font-size: 14px;">🎨 ¿Necesitas ayuda para diseñar tu tarjeta? <a href="diseno.html" target="_blank" style="color: #0070f3; font-weight: 600; text-decoration: none;">📐 Ver guía de diseño aquí</a></p>
                 </div>
             </div>
-
-            <!-- PASO 3 -->
             <div class="paso" data-paso="3">
                 <h3>💰 Paso 3: Planes de pago</h3>
                 <p>Activa tu tarjeta con el plan que mejor se ajuste a tu negocio:</p>
@@ -504,27 +435,16 @@
                     <li>⏳ <strong>Activación inmediata:</strong> Una vez confirmado el pago, tu tarjeta se activa al instante.</li>
                 </ul>
             </div>
-
-            <!-- PASO 4 -->
             <div class="paso" data-paso="4">
                 <h3>📤 Paso 4: Compartir tu tarjeta</h3>
                 <p>Una vez activa, comparte tu tarjeta:</p>
-                <ul>
-                    <li>📱 WhatsApp</li>
-                    <li>📷 Código QR</li>
-                    <li>🌐 Redes sociales</li>
-                    <li>📧 Firma de email</li>
-                </ul>
+                <ul><li>📱 WhatsApp</li><li>📷 Código QR</li><li>🌐 Redes sociales</li><li>📧 Firma de email</li></ul>
             </div>
-
-            <!-- PASO 5 -->
             <div class="paso" data-paso="5">
                 <h3>📷 Paso 5: Código QR</h3>
                 <p>Usa el código QR en tu local, tarjetas físicas o flyers.</p>
                 <p>💡 Escanea con la cámara de cualquier celular.</p>
             </div>
-
-            <!-- PASO 6 -->
             <div class="paso" data-paso="6">
                 <h3>🔄 Paso 6: Usos Gratis y Crecimiento</h3>
                 <p>Cada tarjeta tiene <strong>5 usos gratis</strong> y <strong>navegación gratuita para promocionarse nacional e internacional</strong>.</p>
@@ -538,13 +458,11 @@
                 </ul>
             </div>
         </div>
-
         <div class="navegacion">
             <button class="btn-paso btn-anterior" onclick="pasoAnterior()">◀ Anterior</button>
             <span id="indicadorPaso" style="color:#999;">1 / 7</span>
             <button class="btn-paso btn-siguiente" onclick="pasoSiguiente()" id="btnSiguiente">Siguiente ▶</button>
         </div>
-
         <div class="indicadores" id="indicadores">
             <span class="indicador active" onclick="irPaso(0)"></span>
             <span class="indicador" onclick="irPaso(1)"></span>
@@ -577,33 +495,20 @@ function abrirAyuda() {
     pasoActual = 0;
     actualizarPaso();
 }
-
 function cerrarAyuda() {
     document.getElementById('modalAyuda').classList.remove('active');
     document.body.style.overflow = 'auto';
 }
-
 function pasoSiguiente() {
-    if (pasoActual < totalPasos - 1) {
-        pasoActual++;
-        actualizarPaso();
-    } else {
-        cerrarAyuda();
-    }
+    if (pasoActual < totalPasos - 1) { pasoActual++; actualizarPaso(); } else { cerrarAyuda(); }
 }
-
 function pasoAnterior() {
-    if (pasoActual > 0) {
-        pasoActual--;
-        actualizarPaso();
-    }
+    if (pasoActual > 0) { pasoActual--; actualizarPaso(); }
 }
-
 function irPaso(index) {
     pasoActual = index;
     actualizarPaso();
 }
-
 function actualizarPaso() {
     document.querySelectorAll('.paso').forEach(el => el.classList.remove('active'));
     const pasoEl = document.querySelector(`.paso[data-paso="${pasoActual}"]`);
@@ -631,15 +536,12 @@ let ultimoQrCanvas = null;
 function compartirWhatsApp() {
     window.open(`https://wa.me/?text=📇%20Mi%20tarjeta%20de%20presentación%20digital:%20${encodeURIComponent(ultimaUrl)}`, '_blank');
 }
-
 function compartirFacebook() {
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ultimaUrl)}`, '_blank');
 }
-
 function compartirTwitter() {
     window.open(`https://twitter.com/intent/tweet?text=📇%20Mi%20tarjeta%20de%20presentación%20digital&url=${encodeURIComponent(ultimaUrl)}`, '_blank');
 }
-
 function copiarEnlace() {
     navigator.clipboard.writeText(ultimaUrl).then(() => {
         alert('✅ Enlace copiado al portapapeles');
@@ -647,7 +549,6 @@ function copiarEnlace() {
         prompt('Copia este enlace:', ultimaUrl);
     });
 }
-
 function descargarQR() {
     if (ultimoQrCanvas) {
         const link = document.createElement('a');
@@ -658,66 +559,43 @@ function descargarQR() {
         alert('Error: No se pudo generar la imagen QR');
     }
 }
-
 function cerrarSeccionQR() {
     document.getElementById('seccionQR').classList.add('hidden');
     localStorage.removeItem('ultimaTarjeta');
 }
-
 function mostrarQR(url) {
     ultimaUrl = url;
     document.getElementById('seccionQR').classList.remove('hidden');
     document.getElementById('enlacePublico').textContent = url;
-
     const qrDiv = document.getElementById('qrCodeDiv');
     qrDiv.innerHTML = '';
-
-    const qr = new QRCode(qrDiv, {
-        text: url,
-        width: 150,
-        height: 150
-    });
-
+    const qr = new QRCode(qrDiv, { text: url, width: 150, height: 150 });
     setTimeout(() => {
         const canvas = qrDiv.querySelector('canvas');
-        if (canvas) {
-            ultimoQrCanvas = canvas;
-        }
+        if (canvas) { ultimoQrCanvas = canvas; }
     }, 100);
-
     localStorage.setItem('ultimaTarjeta', JSON.stringify({ url: url }));
 }
-
 function recuperarUltimaTarjeta() {
     const guardada = localStorage.getItem('ultimaTarjeta');
     if (guardada) {
         try {
             const data = JSON.parse(guardada);
-            if (data.url) {
-                mostrarQR(data.url);
-            }
+            if (data.url) { mostrarQR(data.url); }
         } catch (e) {}
     }
 }
 
-// ============================================
-// CONTADOR DE DÍAS PROMOCIONALES (10 DÍAS)
-// ============================================
 function actualizarContador() {
     const fechaInicio = new Date('2026-06-18');
     const fechaFin = new Date(fechaInicio);
     fechaFin.setDate(fechaFin.getDate() + 10);
-
     const hoy = new Date();
     const diffTime = fechaFin - hoy;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
     const diasRestantes = Math.max(0, diffDays);
     const elemento = document.getElementById('diasRestantes');
-    if (elemento) {
-        elemento.textContent = diasRestantes;
-    }
-
+    if (elemento) { elemento.textContent = diasRestantes; }
     if (diasRestantes === 0) {
         const promocionDiv = document.querySelector('.promocion-banner');
         if (promocionDiv) {
@@ -728,17 +606,12 @@ function actualizarContador() {
     }
 }
 
-// ============================================
-// LLAVE BRE-B
-// ============================================
 function mostrarLlaveBreB() {
     document.getElementById('modalLlave').style.display = 'flex';
 }
-
 function cerrarModalLlave() {
     document.getElementById('modalLlave').style.display = 'none';
 }
-
 function copiarLlave() {
     const llave = '0092618602';
     navigator.clipboard.writeText(llave).then(() => {
@@ -747,72 +620,103 @@ function copiarLlave() {
         prompt('Copia esta llave:', llave);
     });
 }
-
 document.addEventListener('click', function(e) {
     const modal = document.getElementById('modalLlave');
-    if (e.target === modal) {
-        modal.style.display = 'none';
-    }
+    if (e.target === modal) { modal.style.display = 'none'; }
 });
 
 // ============================================
-// GUARDAR TARJETA EN CARPETA
+// KIT DE TARJETA (DESDE PRUEBA-KIT - FUNCIONAL)
 // ============================================
-function guardarTarjetaEnCarpeta() {
-    const nombre = document.getElementById('titulo')?.value || 'mi-tarjeta';
-    const preview = document.getElementById('preview');
+function guardarKitTarjeta() {
+    var nombre = document.getElementById('titulo').value || 'mi-tarjeta';
+    var preview = document.getElementById('preview');
+    var enlacePublico = document.getElementById('enlacePublico').textContent || '';
     
     if (!preview || !preview.src || preview.src === '') {
-        alert('❌ Primero crea tu tarjeta y asegúrate de que la imagen esté cargada.');
+        alert('Primero crea tu tarjeta.');
         return;
     }
-    
-    const nombreLimpio = nombre
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9-]/g, '') || 'tarjeta';
-    
-    const nombreArchivo = `tarjeta-${nombreLimpio}.png`;
-    
-    const mensajeOriginal = document.getElementById('mensaje')?.innerText || '';
-    const mensajeElement = document.getElementById('mensaje');
+
+    var kitHTML = crearKitHTML(nombre, preview.src, enlacePublico);
+    var blob = new Blob([kitHTML], { type: 'text/html' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'kit-tarjeta-' + nombre + '.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('KIT guardado: kit-tarjeta-' + nombre + '.html');
+}
+
+function crearKitHTML(nombre, imagenSrc, enlace) {
+    var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Kit - ' + nombre + '</title><style>';
+    html += 'body{font-family:Arial;max-width:500px;margin:50px auto;text-align:center;padding:20px;background:#f3f4f6;}';
+    html += '.kit{background:white;padding:30px;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,0.1);}';
+    html += 'img{width:100%;max-width:300px;border-radius:12px;margin:10px 0;}';
+    html += '.qr{width:150px;height:150px;margin:10px auto;display:block;}';
+    html += '.btn{display:inline-block;background:#0070f3;color:white;padding:10px 20px;border-radius:30px;text-decoration:none;margin:5px;}';
+    html += '.btn:hover{background:#005bb5;}';
+    html += '.enlace{background:#f0f7ff;padding:12px;border-radius:12px;word-break:break-all;font-size:12px;}';
+    html += 'hr{margin:20px 0;border:none;border-top:1px solid #eee;}';
+    html += '</style></head><body><div class="kit">';
+    html += '<h1>📇 Mi Tarjeta Digital</h1>';
+    html += '<p>' + nombre + '</p>';
+    html += '<img src="' + imagenSrc + '" />';
+    html += '<hr><h3>📷 Código QR</h3>';
+    html += '<img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(enlace) + '" />';
+    html += '<hr><h3>🔗 Enlace público</h3>';
+    html += '<div class="enlace">' + enlace + '</div>';
+    html += '<a href="' + enlace + '" target="_blank" class="btn">🔗 Abrir tarjeta</a>';
+    html += '<hr><p style="font-size:12px;color:#999;">Tarjeta creada con Mi Tarjeta Digital</p>';
+    html += '</div></body></html>';
+    return html;
+}
+
+function guardarTarjetaEnCarpeta() {
+    var nombre = document.getElementById('titulo').value || 'mi-tarjeta';
+    var preview = document.getElementById('preview');
+    if (!preview || !preview.src || preview.src === '') {
+        alert('Primero crea tu tarjeta.');
+        return;
+    }
+    var nombreLimpio = nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || 'tarjeta';
+    var nombreArchivo = 'tarjeta-' + nombreLimpio + '.png';
+    var mensajeElement = document.getElementById('mensaje');
     if (mensajeElement) {
         mensajeElement.innerText = '⏳ Guardando tarjeta...';
         mensajeElement.style.color = 'orange';
     }
-    
     fetch(preview.src)
-        .then(response => response.blob())
-        .then(blob => {
-            const url = URL.createObjectURL(blob);
-            const enlace = document.createElement('a');
-            enlace.href = url;
-            enlace.download = nombreArchivo;
-            document.body.appendChild(enlace);
-            enlace.click();
-            document.body.removeChild(enlace);
+        .then(function(response) { return response.blob(); })
+        .then(function(blob) {
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = nombreArchivo;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
             if (mensajeElement) {
                 mensajeElement.innerText = '✅ Tarjeta guardada con éxito';
                 mensajeElement.style.color = 'green';
-                setTimeout(() => {
-                    mensajeElement.innerText = mensajeOriginal;
+                setTimeout(function() {
+                    mensajeElement.innerText = '';
                     mensajeElement.style.color = '';
                 }, 4000);
             }
-            
-            alert(`✅ ¡Tarjeta guardada con éxito!\n\n📁 Carpeta: "MIS TARJETAS DE PRESENTACION"\n📄 Archivo: "${nombreArchivo}"\n\n💡 Busca esta carpeta en tu galería o gestor de archivos.`);
+            alert('✅ ¡Tarjeta guardada con éxito!\n\n📁 Carpeta: "MIS TARJETAS DE PRESENTACION"\n📄 Archivo: "' + nombreArchivo + '"\n\n💡 Busca esta carpeta en tu galería o gestor de archivos.');
         })
-        .catch(error => {
+        .catch(function(error) {
             console.error('Error al descargar:', error);
             if (mensajeElement) {
                 mensajeElement.innerText = '❌ Error al guardar';
                 mensajeElement.style.color = 'red';
-                setTimeout(() => {
-                    mensajeElement.innerText = mensajeOriginal;
+                setTimeout(function() {
+                    mensajeElement.innerText = '';
                     mensajeElement.style.color = '';
                 }, 4000);
             }
@@ -820,25 +724,19 @@ function guardarTarjetaEnCarpeta() {
         });
 }
 
-// ============================================
-// ABRIR MODAL DE LOGIN DESDE BIENVENIDA
-// ============================================
 function abrirModalLogin() {
     document.getElementById('modalAuth').style.display = 'flex';
 }
 
-// ============================================
-// FORMULARIO DE TARJETA
-// ============================================
-const form = document.getElementById('form-tarjeta');
-const messageText = document.getElementById('mensaje');
-const inputImagen = document.getElementById('imagen');
-const preview = document.getElementById('preview');
+var form = document.getElementById('form-tarjeta');
+var messageText = document.getElementById('mensaje');
+var inputImagen = document.getElementById('imagen');
+var preview = document.getElementById('preview');
 
-inputImagen.addEventListener('change', (e) => {
+inputImagen.addEventListener('change', function(e) {
     if (e.target.files && e.target.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
+        var reader = new FileReader();
+        reader.onload = function(event) {
             preview.src = event.target.result;
             preview.style.display = 'block';
         };
@@ -848,43 +746,27 @@ inputImagen.addEventListener('change', (e) => {
 
 form.onsubmit = async function(e) {
     e.preventDefault();
-    const boton = form.querySelector('button');
+    var boton = form.querySelector('button');
     boton.disabled = true;
-
     document.getElementById('mensajeValidacion').style.display = 'block';
-    messageText.style.color = "orange";
-    messageText.innerText = "⏳ Validando imagen... esto puede tomar unos minutos";
-
+    messageText.style.color = 'orange';
+    messageText.innerText = '⏳ Validando imagen... esto puede tomar unos minutos';
     try {
-        const archivo = inputImagen.files[0];
-        if (!archivo) throw new Error("Selecciona una imagen");
-
-        const nombreArchivo = `${Date.now()}_${archivo.name}`;
-
-        const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/tarjetas/${nombreArchivo}`, {
+        var archivo = inputImagen.files[0];
+        if (!archivo) throw new Error('Selecciona una imagen');
+        var nombreArchivo = Date.now() + '_' + archivo.name;
+        var uploadRes = await fetch(SUPABASE_URL + '/storage/v1/object/tarjetas/' + nombreArchivo, {
             method: 'POST',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`
-            },
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY },
             body: archivo
         });
-
         if (!uploadRes.ok) {
-            const error = await uploadRes.text();
-            throw new Error(`Error subiendo imagen: ${error}`);
+            var error = await uploadRes.text();
+            throw new Error('Error subiendo imagen: ' + error);
         }
-
-        const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/tarjetas/${nombreArchivo}`;
-
-        const urlAmigable = document.getElementById('titulo').value
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/\s+/g, '-')
-            .replace(/[^a-z0-9-]/g, '') + '-' + Date.now().toString(36);
-
-        const datos = {
+        var imageUrl = SUPABASE_URL + '/storage/v1/object/public/tarjetas/' + nombreArchivo;
+        var urlAmigable = document.getElementById('titulo').value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-' + Date.now().toString(36);
+        var datos = {
             titulo: document.getElementById('titulo').value,
             subtitulo: document.getElementById('subtitulo').value,
             telefono: document.getElementById('telefono').value,
@@ -894,62 +776,45 @@ form.onsubmit = async function(e) {
             usos: 0,
             bloqueada: false
         };
-
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/perfiles`, {
+        var response = await fetch(SUPABASE_URL + '/rest/v1/perfiles', {
             method: 'POST',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json'
-            },
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });
-
         document.getElementById('mensajeValidacion').style.display = 'none';
-
         if (response.ok) {
-            messageText.style.color = "green";
-            messageText.innerText = "🎉 ¡Tarjeta guardada con éxito!";
-
-            const enlaceCompleto = window.location.origin + window.location.pathname.replace('index.html', '') + `ver-tarjeta.html?url=${urlAmigable}`;
-
+            messageText.style.color = 'green';
+            messageText.innerText = '🎉 ¡Tarjeta guardada con éxito!';
+            var enlaceCompleto = window.location.origin + window.location.pathname.replace('index.html', '') + 'ver-tarjeta.html?url=' + urlAmigable;
             mostrarQR(enlaceCompleto);
-
             form.reset();
             preview.style.display = 'none';
-
         } else {
-            const error = await response.json();
-            throw new Error(error.message || "Error al guardar");
+            var error2 = await response.json();
+            throw new Error(error2.message || 'Error al guardar');
         }
-
-    } catch (error) {
-        console.error('Error:', error);
+    } catch (error3) {
+        console.error('Error:', error3);
         document.getElementById('mensajeValidacion').style.display = 'none';
-        messageText.style.color = "red";
-        messageText.innerText = `❌ ${error.message}`;
+        messageText.style.color = 'red';
+        messageText.innerText = '❌ ' + error3.message;
     } finally {
         boton.disabled = false;
     }
 };
 
-// ============================================
-// AUTENTICACIÓN
-// ============================================
-const modal = document.getElementById('modalAuth');
-const abrirModal = document.getElementById('abrirModalBtn');
-const cerrarModal = document.getElementById('cerrarModal');
-const modalTitulo = document.getElementById('modalTitulo');
-const modalAccionBtn = document.getElementById('modalAccionBtn');
-const modalEmail = document.getElementById('modalEmail');
-const modalPassword = document.getElementById('modalPassword');
-const modalMensaje = document.getElementById('modalMensaje');
-const toggleAuthLink = document.getElementById('toggleAuthLink');
-
-const seccionLogin = document.getElementById('seccionLogin');
-const seccionDashboard = document.getElementById('seccionDashboard');
-
-let esModoLogin = true;
+var modal = document.getElementById('modalAuth');
+var abrirModal = document.getElementById('abrirModalBtn');
+var cerrarModal = document.getElementById('cerrarModal');
+var modalTitulo = document.getElementById('modalTitulo');
+var modalAccionBtn = document.getElementById('modalAccionBtn');
+var modalEmail = document.getElementById('modalEmail');
+var modalPassword = document.getElementById('modalPassword');
+var modalMensaje = document.getElementById('modalMensaje');
+var toggleAuthLink = document.getElementById('toggleAuthLink');
+var seccionLogin = document.getElementById('seccionLogin');
+var seccionDashboard = document.getElementById('seccionDashboard');
+var esModoLogin = true;
 
 function mostrarSeccion(seccion) {
     if (seccion === 'login') {
@@ -960,8 +825,7 @@ function mostrarSeccion(seccion) {
         seccionDashboard.classList.remove('hidden');
     }
 }
-
-abrirModal.addEventListener('click', () => {
+abrirModal.addEventListener('click', function() {
     modal.style.display = 'flex';
     modalEmail.value = '';
     modalPassword.value = '';
@@ -969,24 +833,16 @@ abrirModal.addEventListener('click', () => {
     esModoLogin = true;
     actualizarModalUI();
 });
-
-cerrarModal.addEventListener('click', () => {
-    modal.style.display = 'none';
+cerrarModal.addEventListener('click', function() { modal.style.display = 'none'; });
+window.addEventListener('click', function(e) {
+    if (e.target === modal) { modal.style.display = 'none'; }
 });
-
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        modal.style.display = 'none';
-    }
-});
-
-toggleAuthLink.addEventListener('click', () => {
+toggleAuthLink.addEventListener('click', function() {
     esModoLogin = !esModoLogin;
     actualizarModalUI();
     modalMensaje.innerHTML = '';
     modalPassword.value = '';
 });
-
 function actualizarModalUI() {
     if (esModoLogin) {
         modalTitulo.innerText = 'Iniciar Sesión';
@@ -1000,58 +856,49 @@ function actualizarModalUI() {
         modalAccionBtn.className = 'btn-auth btn-registro';
     }
 }
-
-function mostrarMensajeModal(texto, esError = true) {
+function mostrarMensajeModal(texto, esError) {
+    esError = esError !== undefined ? esError : true;
     modalMensaje.innerHTML = texto;
     modalMensaje.style.color = esError ? '#ef4444' : '#10b981';
-    setTimeout(() => {
-        if (modalMensaje.innerHTML === texto) {
-            modalMensaje.innerHTML = '';
-        }
+    setTimeout(function() {
+        if (modalMensaje.innerHTML === texto) { modalMensaje.innerHTML = ''; }
     }, 3000);
 }
-
 async function registrarUsuario(email, password) {
-    const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+    var response = await fetch(SUPABASE_URL + '/auth/v1/signup', {
         method: 'POST',
         headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email: email, password: password })
     });
     return response.json();
 }
-
 async function iniciarSesion(email, password) {
-    const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    var response = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
         method: 'POST',
         headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email: email, password: password })
     });
     return response.json();
 }
-
 function guardarSesion(session) {
     localStorage.setItem('mi_sesion', JSON.stringify(session));
 }
-
 function obtenerSesion() {
-    const guardada = localStorage.getItem('mi_sesion');
+    var guardada = localStorage.getItem('mi_sesion');
     return guardada ? JSON.parse(guardada) : null;
 }
-
 function eliminarSesion() {
     localStorage.removeItem('mi_sesion');
 }
-
 function actualizarBarraUsuario() {
-    const sesion = obtenerSesion();
-    const userSpan = document.getElementById('userStatusDisplay');
-    const abrirBtn = document.getElementById('abrirModalBtn');
-    const cerrarBtn = document.getElementById('cerrarSesionBtn');
-    const barraUsuario = document.getElementById('barraUsuario');
-    const bienvenida = document.getElementById('seccionBienvenida');
-
+    var sesion = obtenerSesion();
+    var userSpan = document.getElementById('userStatusDisplay');
+    var abrirBtn = document.getElementById('abrirModalBtn');
+    var cerrarBtn = document.getElementById('cerrarSesionBtn');
+    var barraUsuario = document.getElementById('barraUsuario');
+    var bienvenida = document.getElementById('seccionBienvenida');
     if (sesion && sesion.user) {
-        userSpan.innerHTML = `✅ Conectado como: ${sesion.user.email}`;
+        userSpan.innerHTML = '✅ Conectado como: ' + sesion.user.email;
         abrirBtn.style.display = 'none';
         cerrarBtn.style.display = 'inline-block';
         barraUsuario.style.display = 'flex';
@@ -1068,23 +915,19 @@ function actualizarBarraUsuario() {
         mostrarSeccion('login');
     }
 }
-
-modalAccionBtn.addEventListener('click', async () => {
-    const email = modalEmail.value.trim();
-    const password = modalPassword.value;
-
+modalAccionBtn.addEventListener('click', async function() {
+    var email = modalEmail.value.trim();
+    var password = modalPassword.value;
     if (!email || !password) {
         mostrarMensajeModal('Complete correo y contraseña');
         return;
     }
-
     if (!esModoLogin && password.length < 6) {
         mostrarMensajeModal('La contraseña debe tener al menos 6 caracteres');
         return;
     }
-
     if (!esModoLogin) {
-        const consentimiento = document.getElementById('consentimiento');
+        var consentimiento = document.getElementById('consentimiento');
         if (!consentimiento || !consentimiento.checked) {
             mostrarMensajeModal('Debes aceptar los Términos y Condiciones para registrarte');
             modalAccionBtn.disabled = false;
@@ -1092,48 +935,41 @@ modalAccionBtn.addEventListener('click', async () => {
             return;
         }
     }
-
     modalAccionBtn.disabled = true;
     modalAccionBtn.innerText = esModoLogin ? 'Ingresando...' : 'Registrando...';
-
     try {
-        let resultado;
+        var resultado;
         if (esModoLogin) {
             resultado = await iniciarSesion(email, password);
         } else {
             resultado = await registrarUsuario(email, password);
         }
-
         if (resultado.access_token) {
             guardarSesion(resultado);
             actualizarBarraUsuario();
             modal.style.display = 'none';
             mostrarMensajeModal('✅ Sesión iniciada correctamente', false);
-            setTimeout(() => location.reload(), 1000);
+            setTimeout(function() { location.reload(); }, 1000);
         } else if (resultado.user && !resultado.access_token) {
             mostrarMensajeModal('✅ Cuenta creada. Revise su correo para confirmar.', false);
-            setTimeout(() => { modal.style.display = 'none'; }, 2000);
+            setTimeout(function() { modal.style.display = 'none'; }, 2000);
         } else {
-            const mensajeError = resultado.error_description || resultado.msg || 'Error desconocido';
-            mostrarMensajeModal(`❌ ${mensajeError}`);
+            var mensajeError = resultado.error_description || resultado.msg || 'Error desconocido';
+            mostrarMensajeModal('❌ ' + mensajeError);
         }
     } catch (error) {
-        mostrarMensajeModal(`❌ Error de conexión: ${error.message}`);
+        mostrarMensajeModal('❌ Error de conexión: ' + error.message);
     } finally {
         modalAccionBtn.disabled = false;
         modalAccionBtn.innerText = esModoLogin ? 'Iniciar Sesión' : 'Registrarse';
     }
 });
-
-document.getElementById('cerrarSesionBtn').addEventListener('click', () => {
+document.getElementById('cerrarSesionBtn').addEventListener('click', function() {
     eliminarSesion();
     actualizarBarraUsuario();
     location.reload();
 });
 
-// ============================================
-// INICIALIZAR
-// ============================================
 actualizarBarraUsuario();
 </script>
 </body>
